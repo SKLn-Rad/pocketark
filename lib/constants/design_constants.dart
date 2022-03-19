@@ -24,12 +24,12 @@ final ThemeData kThemeData = ThemeData(
 );
 
 final TextTheme kTextTheme = TextTheme(
-  headline1: GoogleFonts.manrope(fontSize: 113, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
-  headline2: GoogleFonts.manrope(fontSize: 71, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
-  headline3: GoogleFonts.manrope(fontSize: 57, fontWeight: FontWeight.w400, color: Colors.white),
-  headline4: GoogleFonts.manrope(fontSize: 40, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
-  headline5: GoogleFonts.manrope(fontSize: 28, fontWeight: FontWeight.w400, color: Colors.white),
-  headline6: GoogleFonts.manrope(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
+  headline1: GoogleFonts.carterOne(fontSize: 113, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
+  headline2: GoogleFonts.carterOne(fontSize: 71, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
+  headline3: GoogleFonts.carterOne(fontSize: 57, fontWeight: FontWeight.w400, color: Colors.white),
+  headline4: GoogleFonts.carterOne(fontSize: 40, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
+  headline5: GoogleFonts.carterOne(fontSize: 28, fontWeight: FontWeight.w400, color: Colors.white),
+  headline6: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
   subtitle1: GoogleFonts.manrope(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
   subtitle2: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
   bodyText1: GoogleFonts.manrope(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.5, color: Colors.white),
@@ -43,6 +43,7 @@ final TextTheme kTextTheme = TextTheme(
 const Color kPrimaryColor = Color(0xFF075985);
 const Color kSecondaryColor = Color(0xFF071A85);
 const Color kTertiaryColor = Color(0xFF078572);
+const Color kHighlightColor = Color(0xFF0B8CD1);
 
 const Color kGrayLighter = Color(0xFF929292);
 const Color kGrayLight = Color(0xFF666666);
