@@ -18,6 +18,11 @@ Future<void> attemptAnonymousLogin() async {
   }
 
   final FirebaseAuth firebaseAuth = inqvine.getFromLocator();
+  if (firebaseAuth.currentUser != null) {
+    'Already logged in'.logDebug();
+    return;
+  }
+
   await firebaseAuth.signInAnonymously();
   'Signed in successfully'.logInfo();
 }
