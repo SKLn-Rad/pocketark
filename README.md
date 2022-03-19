@@ -31,5 +31,5 @@ We need people to help translate the app, below are a few we want to target ASAP
 * French (FR)
 
 ## Contact us
-In Game: `notatraptm` - `Slen`
+In Game: `notatraptm` - `Slen`  
 Discord: `Rad#7829`
