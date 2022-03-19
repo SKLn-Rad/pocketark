@@ -12,7 +12,7 @@ Future<void> configurePocketArkServices() async {
   await inqvine.registerInqvineServices();
 
   // Core Services
-  inqvine.registerService(ApplicationService());
+  await inqvine.registerService(ApplicationService());
 
   // Third Party Services
   final FirebaseApp firebaseApp = await Firebase.initializeApp(
