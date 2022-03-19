@@ -1,0 +1,27 @@
+name: PocketArk CI
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - "**/README.md"
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Test with coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test --coverage
+      - run: curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - run: chmod +x codecov
+      - run: ./codecov
