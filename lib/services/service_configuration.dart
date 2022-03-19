@@ -15,11 +15,6 @@ Future<void> configurePocketArkServices() async {
   WidgetsFlutterBinding.ensureInitialized();
   await inqvine.registerInqvineServices();
 
-  // Core Services
-  await inqvine.registerService(ApplicationService());
-  await inqvine.registerService(EventService());
-  await inqvine.registerService(EventAdminService());
-
   // Third Party Services
   final FirebaseApp firebaseApp = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -28,6 +23,11 @@ Future<void> configurePocketArkServices() async {
   inqvine.registerInLocator<FirebaseApp>(firebaseApp);
   inqvine.registerInLocator<FirebaseFirestore>(FirebaseFirestore.instance);
   inqvine.registerInLocator<FirebaseAuth>(FirebaseAuth.instance);
+
+  // Core Services
+  await inqvine.registerService(ApplicationService());
+  await inqvine.registerService(EventService());
+  await inqvine.registerService(EventAdminService());
 }
 
 mixin PocketArkServiceMixin {
