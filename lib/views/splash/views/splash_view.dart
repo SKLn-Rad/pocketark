@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
 // Project imports:
-import 'package:pocketark/constants/design_constants.dart';
-import 'package:pocketark/views/splash/state/splash_view_model.dart';
+import '../../../constants/design_constants.dart';
+import '../../../views/splash/state/splash_view_model.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../widgets/indicators/pocketark_loading_indicator.dart';
 import '../../../widgets/scaffolds/pocketark_scaffold.dart';

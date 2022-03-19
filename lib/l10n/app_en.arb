@@ -11,5 +11,18 @@
     "pageLegalButtonContinue": "Let's go!",
     "@pageLegalButtonContinue": {
         "description": "Button gating the user from continuing page the legal view"
+    },
+
+    "pageHomeNavBarLabelHome": "Home",
+    "@pageHomeNavBarLabelHome": {
+        "description": "Button which navigates to the Home pane"
+    },
+    "pageHomeNavBarLabelEvents": "Events",
+    "@pageHomeNavBarLabelEvents": {
+        "description": "Button which navigates to the Events pane"
+    },
+    "pageHomeNavBarLabelSettings": "Settings",
+    "@pageHomeNavBarLabelSettings": {
+        "description": "Button which navigates to the Settings pane"
     }
 }
