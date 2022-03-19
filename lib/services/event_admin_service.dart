@@ -98,9 +98,9 @@ class EventAdminService extends InqvineServiceBase {
     event.recItemLevel = eventItemLevel;
 
     // Attempt to find fallback name and icon path
-    if (cachedJsonMetadata.containsKey(eventId)) {
-      event.fallbackName = cachedJsonMetadata[eventId][0];
-      event.iconPath = cachedJsonMetadata[eventId][1];
+    if (cachedJsonMetadata.containsKey(eventId.toString())) {
+      event.fallbackName = cachedJsonMetadata[eventId.toString()][0];
+      event.iconPath = cachedJsonMetadata[eventId.toString()][1];
     }
 
     final LostArkEvent_LostArkEventSchedule schedule = LostArkEvent_LostArkEventSchedule.create();
