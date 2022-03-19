@@ -1,4 +1,4 @@
-import 'package:inqvine_core_firebase/inqvine_core_firebase.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
 class EventService extends InqvineServiceBase {
