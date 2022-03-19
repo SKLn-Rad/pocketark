@@ -9,6 +9,9 @@ void main() {
   testWidgets('Can load localizations from context extension successfully', testLocalizationExtension);
 }
 
+// Tests the loading of the ARB files
+// Relates to:
+//  - https://github.com/SKLn-Rad/pocketark/issues/3
 Future<void> testLocalizationExtension(WidgetTester widgetTester) async {
   // Arrange
   final Widget child = App(
