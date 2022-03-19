@@ -6,5 +6,10 @@
     "pageSplashCaption": "Loading...",
     "@pageSplashCaption": {
         "description": "Center description on the splash screen to let the user know the app is loading"
+    },
+
+    "pageLegalButtonContinue": "Let's go!",
+    "@pageLegalButtonContinue": {
+        "description": "Button gating the user from continuing page the legal view"
     }
 }

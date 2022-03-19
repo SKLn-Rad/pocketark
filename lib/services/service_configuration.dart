@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:pocketark/services/event_admin_service.dart';
 import 'package:pocketark/services/event_service.dart';
+import 'package:pocketark/services/system_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
@@ -32,6 +33,7 @@ Future<void> configurePocketArkServices() async {
   await inqvine.registerService(ApplicationService());
   await inqvine.registerService(EventService());
   await inqvine.registerService(EventAdminService());
+  await inqvine.registerService(SystemService());
 }
 
 mixin PocketArkServiceMixin {
@@ -39,6 +41,7 @@ mixin PocketArkServiceMixin {
   ApplicationService get applicationService => inqvine.getFromLocator();
   EventService get eventService => inqvine.getFromLocator();
   EventAdminService get eventAdminService => inqvine.getFromLocator();
+  SystemService get systemService => inqvine.getFromLocator();
 
   // Third Party Services
   FirebaseApp get firebaseApp => inqvine.getFromLocator();

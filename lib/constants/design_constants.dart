@@ -3,6 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData kThemeData = ThemeData(
   textTheme: kTextTheme,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Color(0xFF075985),
+  ),
+  primaryColor: const Color(0xFF075985),
   scaffoldBackgroundColor: const Color(0xFF2A303C),
   canvasColor: const Color(0xFF242933),
   buttonTheme: const ButtonThemeData(

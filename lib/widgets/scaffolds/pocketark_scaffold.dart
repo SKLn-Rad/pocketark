@@ -5,12 +5,14 @@ import 'package:inqvine_core_main/inqvine_core_main.dart';
 class PocketArkScaffold extends StatelessWidget {
   const PocketArkScaffold({
     required this.body,
+    this.appBar,
     this.systemUiOverlayStyle,
     Key? key,
   }) : super(key: key);
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
 
+  final PreferredSizeWidget? appBar;
   final Widget body;
 
   void handleKeyboardDismiss(BuildContext context) {
@@ -38,6 +40,7 @@ class PocketArkScaffold extends StatelessWidget {
       child: GestureDetector(
         onTap: () => handleKeyboardDismiss(context),
         child: Scaffold(
+          appBar: appBar,
           body: body,
         ),
       ),

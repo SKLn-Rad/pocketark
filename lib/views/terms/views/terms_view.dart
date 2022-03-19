@@ -1,13 +1,52 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pocketark/widgets/scaffolds/pocketark_scaffold.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/views/terms/state/terms_view_model.dart';
 
-class TermsView extends StatelessWidget {
+import '../../../constants/design_constants.dart';
+import '../../../constants/legal_constants.dart';
+import '../../../constants/application_constants.dart';
+import '../../../widgets/scaffolds/pocketark_scaffold.dart';
+import '../../../extensions/context_extensions.dart';
+
+class TermsView extends HookConsumerWidget {
   const TermsView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TermsViewModel viewModel = useViewModel(ref, () => TermsViewModel());
     return PocketArkScaffold(
-      body: Container(),
+      appBar: AppBar(
+        title: const Text(kApplicationName),
+      ),
+      body: ListView(
+        padding: kSpacingMedium.asPaddingAll,
+        children: <Widget>[
+          Markdown(
+            data: kTermsOfUse,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            onTapLink: (_, String? url, __) => viewModel.systemService.openUrl(url ?? ''),
+          ),
+          kSpacingLarge.asHeightWidget,
+          Markdown(
+            data: kPrivacyPolicy,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            onTapLink: (_, String? url, __) => viewModel.systemService.openUrl(url ?? ''),
+          ),
+          kSpacingLarge.asHeightWidget,
+          CupertinoButton(
+            color: context.theme.primaryColor,
+            child: Text(context.localizations?.pageLegalButtonContinue ?? ''),
+            onPressed: () {},
+          ),
+          kSpacingSmall.asHeightWidget,
+        ],
+      ),
     );
   }
 }
