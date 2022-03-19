@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/views/terms/state/terms_view_model.dart';
 
+import '../../../views/terms/state/terms_view_model.dart';
 import '../../../constants/design_constants.dart';
 import '../../../constants/legal_constants.dart';
 import '../../../constants/application_constants.dart';
@@ -42,7 +42,7 @@ class TermsView extends HookConsumerWidget {
           CupertinoButton(
             color: context.theme.primaryColor,
             child: Text(context.localizations?.pageLegalButtonContinue ?? ''),
-            onPressed: () {},
+            onPressed: viewModel.onTermsAccepted,
           ),
           kSpacingSmall.asHeightWidget,
         ],
