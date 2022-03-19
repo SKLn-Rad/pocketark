@@ -1,9 +1,14 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../views/home/views/home_view.dart';
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+// Project imports:
+import '../constants/application_constants.dart';
 import '../extensions/context_extensions.dart';
+import '../views/home/views/home_view.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -17,6 +22,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateTitle: (BuildContext context) => context.localizations?.applicationName ?? '',
+      navigatorKey: kNavigatorKey,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
