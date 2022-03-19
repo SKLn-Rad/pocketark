@@ -30,9 +30,6 @@ class EventAdminService extends InqvineServiceBase {
 
   void updateEvent(List<dynamic> data) {
     LostArkEvent event = LostArkEvent.create();
-    // if (knownAdminEvents.containsKey(eventValue)) {
-    //   event = knownAdminEvents[eventValue]!;
-    // }
 
     // print('Making new schedule for event: $eventValue');
     final int? eventType = int.tryParse(data[0]);
@@ -44,6 +41,11 @@ class EventAdminService extends InqvineServiceBase {
 
     if (eventType == null || eventId == null) {
       return;
+    }
+
+    //* Get existing if it exists
+    if (knownAdminEvents.containsKey(eventId)) {
+      event = knownAdminEvents[eventId]!;
     }
 
     // Get start and end time
