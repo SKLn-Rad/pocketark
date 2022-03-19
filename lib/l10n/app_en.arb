@@ -4,25 +4,17 @@
     "applicationName": "PocketArk",
 
     "pageSplashCaption": "Loading...",
-    "@pageSplashCaption": {
-        "description": "Center description on the splash screen to let the user know the app is loading"
-    },
 
     "pageLegalButtonContinue": "Let's go!",
-    "@pageLegalButtonContinue": {
-        "description": "Button gating the user from continuing page the legal view"
-    },
+
+    "pageHomeComponentHomeHeadingComingSoon": "Coming soon!",
+    "pageHomeComponentHomeCaptionVisitUs": "Check out our GitHub for more details",
 
     "pageHomeNavBarLabelHome": "Home",
-    "@pageHomeNavBarLabelHome": {
-        "description": "Button which navigates to the Home pane"
-    },
     "pageHomeNavBarLabelEvents": "Events",
-    "@pageHomeNavBarLabelEvents": {
-        "description": "Button which navigates to the Events pane"
-    },
     "pageHomeNavBarLabelSettings": "Settings",
-    "@pageHomeNavBarLabelSettings": {
-        "description": "Button which navigates to the Settings pane"
-    }
+
+    "sharedActionsRetry": "Retry",
+
+    "errorsNotConnected": "Failed to connect to server"
 }

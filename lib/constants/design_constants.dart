@@ -60,3 +60,4 @@ const double kSpacingExtraLarge = 30.0;
 
 // Icons
 const double kAppBarIconHeight = 42.0;
+const double kDecorationIconCenterHeight = 92.0;

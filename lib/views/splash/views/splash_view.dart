@@ -1,8 +1,13 @@
 // Flutter imports:
+import 'dart:collection';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // Package imports:
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/resources/resources.dart';
 
 // Project imports:
 import '../../../constants/design_constants.dart';
@@ -16,16 +21,39 @@ class SplashView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useViewModel(ref, () => SplashViewModel());
+    final SplashViewModel viewModel = useViewModel(ref, () => SplashViewModel());
     return PocketArkScaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const PocketArkLoadingIndicator(),
-            kSpacingMedium.asHeightWidget,
-            Text(context.localizations?.pageSplashCaption ?? ''),
-          ],
+      body: Padding(
+        padding: kSpacingLarge.asPaddingAll,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (viewModel.canRetryBootstrap) ...<Widget>[
+                SvgPicture.asset(
+                  PocketArkImages.logoLetter,
+                  color: Colors.white,
+                  height: kDecorationIconCenterHeight,
+                ),
+                kSpacingLarge.asHeightWidget,
+                Text(
+                  context.localizations?.errorsNotConnected ?? '',
+                  style: context.textTheme.headline6,
+                ),
+                kSpacingSmall.asHeightWidget,
+                CupertinoButton(
+                  onPressed: viewModel.bootstrap,
+                  color: context.theme.primaryColor,
+                  child: Text(context.localizations?.sharedActionsRetry ?? ''),
+                ),
+              ],
+              if (!viewModel.canRetryBootstrap) ...<Widget>[
+                const PocketArkLoadingIndicator(),
+                kSpacingMedium.asHeightWidget,
+                Text(context.localizations?.pageSplashCaption ?? ''),
+              ],
+            ],
+          ),
         ),
       ),
     );

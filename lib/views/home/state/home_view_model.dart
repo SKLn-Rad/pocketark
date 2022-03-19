@@ -22,4 +22,10 @@ class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
 
     notifyListeners();
   }
+
+  @override
+  void onFirstRender() {
+    super.onFirstRender();
+    authService.attemptAnonymousLogin();
+  }
 }
