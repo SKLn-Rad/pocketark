@@ -9,8 +9,7 @@ message LostArkEvent {
     repeated LostArkEventSchedule schedule = 5;
 
     message LostArkEventSchedule {
-        int32 time = 1;
-        int32 day = 2;
-        int32 month = 3;
+        int64 time_start = 1;
+        int64 time_end = 2;
     }
 }

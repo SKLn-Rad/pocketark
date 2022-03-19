@@ -7,31 +7,27 @@
 
 import 'dart:core' as $core;
 
+import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class LostArkEvent_LostArkEventSchedule extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LostArkEvent.LostArkEventSchedule', createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'time', $pb.PbFieldType.O3)
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'day', $pb.PbFieldType.O3)
-    ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'month', $pb.PbFieldType.O3)
+    ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'timeStart')
+    ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'timeEnd')
     ..hasRequiredFields = false
   ;
 
   LostArkEvent_LostArkEventSchedule._() : super();
   factory LostArkEvent_LostArkEventSchedule({
-    $core.int? time,
-    $core.int? day,
-    $core.int? month,
+    $fixnum.Int64? timeStart,
+    $fixnum.Int64? timeEnd,
   }) {
     final _result = create();
-    if (time != null) {
-      _result.time = time;
+    if (timeStart != null) {
+      _result.timeStart = timeStart;
     }
-    if (day != null) {
-      _result.day = day;
-    }
-    if (month != null) {
-      _result.month = month;
+    if (timeEnd != null) {
+      _result.timeEnd = timeEnd;
     }
     return _result;
   }
@@ -57,31 +53,22 @@ class LostArkEvent_LostArkEventSchedule extends $pb.GeneratedMessage {
   static LostArkEvent_LostArkEventSchedule? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get time => $_getIZ(0);
+  $fixnum.Int64 get timeStart => $_getI64(0);
   @$pb.TagNumber(1)
-  set time($core.int v) { $_setSignedInt32(0, v); }
+  set timeStart($fixnum.Int64 v) { $_setInt64(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasTime() => $_has(0);
+  $core.bool hasTimeStart() => $_has(0);
   @$pb.TagNumber(1)
-  void clearTime() => clearField(1);
+  void clearTimeStart() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.int get day => $_getIZ(1);
+  $fixnum.Int64 get timeEnd => $_getI64(1);
   @$pb.TagNumber(2)
-  set day($core.int v) { $_setSignedInt32(1, v); }
+  set timeEnd($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasDay() => $_has(1);
+  $core.bool hasTimeEnd() => $_has(1);
   @$pb.TagNumber(2)
-  void clearDay() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.int get month => $_getIZ(2);
-  @$pb.TagNumber(3)
-  set month($core.int v) { $_setSignedInt32(2, v); }
-  @$pb.TagNumber(3)
-  $core.bool hasMonth() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearMonth() => clearField(3);
+  void clearTimeEnd() => clearField(2);
 }
 
 class LostArkEvent extends $pb.GeneratedMessage {

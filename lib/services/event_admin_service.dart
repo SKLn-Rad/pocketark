@@ -1,42 +1,91 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/proto/events.pb.dart';
-import 'dart:convert';
+import '../proto/events.pb.dart';
 
 class EventAdminService extends InqvineServiceBase {
   final Map<int, LostArkEvent> knownAdminEvents = <int, LostArkEvent>{};
-  final Set<Map<String, dynamic>> items = {};
-  Map<int, dynamic> cache = <int, dynamic>{};
 
-  void visitObject(object, {int depth = 0}) {
+  final Map<int, dynamic> eventParseCache = <int, dynamic>{};
+  final List<List<dynamic>> eventParseResults = <List<dynamic>>[];
+
+  void visitEventData(object, {int depth = 0}) {
+    eventParseCache.removeWhere((key, value) => key > depth);
     if (object is List) {
       for (dynamic item in object) {
-        cache[depth] = item;
-        visitObject(item, depth: depth + 1);
+        visitEventData(item, depth: depth + 1);
       }
     } else if (object is Map) {
       for (dynamic item in object.keys) {
-        cache[depth] = item;
-        visitObject(object[item], depth: depth + 1);
+        eventParseCache[depth] = item;
+        visitEventData(object[item], depth: depth + 1);
       }
     } else if (object is String) {
-      print('Object $object found at depth $depth');
       // Walk back through depth, getting the correct values
+      eventParseCache[depth] = object;
+      eventParseResults.add(eventParseCache.values.toList());
     }
   }
 
-  void updateEvent(int? catagoryValue, int? monthValue, int? dayValue, int itemLevelValue, int? eventValue, String timeValue) {
-    if (catagoryValue == null || monthValue == null || dayValue == null || eventValue == null) {
+  void updateEvent(List<dynamic> data) {
+    LostArkEvent event = LostArkEvent.create();
+    // if (knownAdminEvents.containsKey(eventValue)) {
+    //   event = knownAdminEvents[eventValue]!;
+    // }
+
+    // print('Making new schedule for event: $eventValue');
+    final int? eventType = int.tryParse(data[0]);
+    final String eventMonth = (data[1] as String).padLeft(2, '0');
+    final String eventDay = (data[2]).padLeft(2, '0');
+    final int eventItemLevel = int.tryParse(data[3]) ?? 0;
+    final int? eventId = int.tryParse(data[4]);
+    final String time = data[5];
+
+    if (eventType == null || eventId == null) {
       return;
     }
 
-    LostArkEvent event = LostArkEvent.create();
-    if (knownAdminEvents.containsKey(eventValue)) {
-      event = knownAdminEvents[eventValue]!;
+    // Get start and end time
+    final bool isRange = time.contains('-');
+    String startTimeHour = '';
+    String startTimeMinute = '';
+    String endTimeHour = '';
+    String endTimeMinute = '';
+
+    if (isRange) {
+      startTimeHour = time.split('-').first.split(':').first.padLeft(2, '0');
+      startTimeMinute = time.split('-').first.split(':').last.padLeft(2, '0');
+      endTimeHour = time.split('-').last.split(':').first.padLeft(2, '0');
+      endTimeMinute = time.split('-').last.split(':').last.padLeft(2, '0');
+    } else {
+      startTimeHour = time.split(':').first.padLeft(2, '0');
+      startTimeMinute = time.split(':').last.padLeft(2, '0');
     }
 
-    print('Making new schedule for event: $eventValue');
+    // Get closest time
+    DateTime? startTime;
+    DateTime? endTime;
+
+    final DateTime currentTime = DateTime.now().toUtc();
+    final int year = currentTime.year;
+
+    //* Hack to determine which year is most likely as we only get month and day
+    startTime = <DateTime>[
+      DateTime.parse('${year - 1}-$eventMonth-${eventDay}T$startTimeHour:$startTimeMinute:00+01:00'),
+      DateTime.parse('$year-$eventMonth-${eventDay}T$startTimeHour:$startTimeMinute:00+01:00'),
+      DateTime.parse('${year + 1}-$eventMonth-${eventDay}T$startTimeHour:$startTimeMinute:00+01:00'),
+    ].reduce((a, b) => a.difference(currentTime).abs() < b.difference(currentTime).abs() ? a : b);
+
+    if (isRange) {
+      endTime = <DateTime>[
+        DateTime.parse('${year - 1}-$eventMonth-${eventDay}T$endTimeHour:$endTimeMinute:00+01:00'),
+        DateTime.parse('$year-$eventMonth-${eventDay}T$endTimeHour:$endTimeMinute:00+01:00'),
+        DateTime.parse('${year + 1}-$eventMonth-${eventDay}T$endTimeHour:$endTimeMinute:00+01:00'),
+      ].reduce((a, b) => a.difference(currentTime).abs() < b.difference(currentTime).abs() ? a : b);
+    }
+
+    'Got times: $startTime - $endTime'.logDebug();
   }
 
   Future<void> uploadNewEvents() async {
@@ -55,11 +104,18 @@ class EventAdminService extends InqvineServiceBase {
     // Get event data
     final String response = await rootBundle.loadString("assets/data.json");
     final Map<String, dynamic> rawData = json.decode(response);
-    items.clear();
-    visitObject(rawData);
+
+    eventParseCache.clear();
+    eventParseResults.clear();
+    visitEventData(rawData);
 
     // Normalise event data
     knownAdminEvents.clear();
+    for (final List<dynamic> data in eventParseResults) {
+      updateEvent(data);
+    }
+
+    'Sorted data successfully'.logDebug();
 
     //* event[eventID]
     //? keyCatagory
