@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/services/event_service.dart';
 import '../proto/events.pb.dart';
+import 'package:fixnum/fixnum.dart';
 
 class EventAdminService extends InqvineServiceBase {
   final Map<int, LostArkEvent> knownAdminEvents = <int, LostArkEvent>{};
@@ -77,17 +80,28 @@ class EventAdminService extends InqvineServiceBase {
       DateTime.parse('${year - 1}-$eventMonth-${eventDay}T$startTimeHour:$startTimeMinute:00+01:00'),
       DateTime.parse('$year-$eventMonth-${eventDay}T$startTimeHour:$startTimeMinute:00+01:00'),
       DateTime.parse('${year + 1}-$eventMonth-${eventDay}T$startTimeHour:$startTimeMinute:00+01:00'),
-    ].reduce((a, b) => a.difference(currentTime).abs() < b.difference(currentTime).abs() ? a : b);
+    ].reduce((a, b) => a.difference(currentTime).abs() < b.difference(currentTime).abs() ? a : b).toUtc();
 
     if (isRange) {
       endTime = <DateTime>[
         DateTime.parse('${year - 1}-$eventMonth-${eventDay}T$endTimeHour:$endTimeMinute:00+01:00'),
         DateTime.parse('$year-$eventMonth-${eventDay}T$endTimeHour:$endTimeMinute:00+01:00'),
         DateTime.parse('${year + 1}-$eventMonth-${eventDay}T$endTimeHour:$endTimeMinute:00+01:00'),
-      ].reduce((a, b) => a.difference(currentTime).abs() < b.difference(currentTime).abs() ? a : b);
+      ].reduce((a, b) => a.difference(currentTime).abs() < b.difference(currentTime).abs() ? a : b).toUtc();
     }
 
-    'Got times: $startTime - $endTime'.logDebug();
+    event.id = eventId;
+    event.type = eventType;
+    event.recItemLevel = eventItemLevel;
+    event.iconPath = "";
+
+    final LostArkEvent_LostArkEventSchedule schedule = LostArkEvent_LostArkEventSchedule.create();
+    schedule.timeStart = Int64(startTime.millisecondsSinceEpoch);
+    if (isRange) {
+      schedule.timeEnd = Int64(endTime!.millisecondsSinceEpoch);
+    }
+    event.schedule.add(schedule);
+    knownAdminEvents[eventId] = event;
   }
 
   Future<void> uploadNewEvents() async {
@@ -97,11 +111,11 @@ class EventAdminService extends InqvineServiceBase {
     }
 
     // Clear existing collection
-    // 'Deleting old events'.logDebug();
-    // final QuerySnapshot existingSnapshot = await EventService.kEventCollection.get();
-    // for (final DocumentSnapshot existingDocumentSnapshot in existingSnapshot.docs) {
-    //   await existingDocumentSnapshot.reference.delete();
-    // }
+    'Deleting old events'.logDebug();
+    final QuerySnapshot existingSnapshot = await EventService.kEventCollection.get();
+    for (final DocumentSnapshot existingDocumentSnapshot in existingSnapshot.docs) {
+      await existingDocumentSnapshot.reference.delete();
+    }
 
     // Get event data
     final String response = await rootBundle.loadString("assets/data.json");
@@ -123,9 +137,9 @@ class EventAdminService extends InqvineServiceBase {
     //? keyCatagory
 
     // Add new events
-    // for (final LostArkEvent event in knownAdminEvents.values) {
-    //   final Object? json = event.toProto3Json();
-    //   await EventService.kEventCollection.add(json);
-    // }
+    for (final LostArkEvent event in knownAdminEvents.values) {
+      final Object? json = event.toProto3Json();
+      await EventService.kEventCollection.add(json);
+    }
   }
 }

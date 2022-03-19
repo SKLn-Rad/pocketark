@@ -6,6 +6,7 @@ class SplashViewModel extends BaseViewModel with PocketArkServiceMixin {
   @override
   void onFirstRender() {
     super.onFirstRender();
-    eventAdminService.uploadNewEvents();
+    //! only uncomment to update db
+    // eventAdminService.uploadNewEvents();
   }
 }
