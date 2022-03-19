@@ -20,6 +20,7 @@ dependencies:
   
   # UI
   go_router: ^3.0.4
+  flutter_spinkit: ^5.1.0
 
   # Other
   intl: ^0.17.0
@@ -33,9 +34,26 @@ dev_dependencies:
   import_sorter: ^4.6.0
   build_runner: ^2.1.8
 
+  # UI
+  flutter_launcher_icons: ^0.9.2
+  flutter_native_splash: ^2.1.1
+
 flutter:
   uses-material-design: true
   generate: true
 
   assets:
     - assets/
+
+flutter_native_splash:
+  color: "2A303C"
+  ios: false
+  android: false
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path_android: "assets/images/logo_flat.png"
+  image_path_ios: "assets/images/logo.png"
+  adaptive_icon_background: "#FF2A303C"
+  adaptive_icon_foreground: "assets/images/logo_flat.png"

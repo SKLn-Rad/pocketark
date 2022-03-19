@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
 // Project imports:
+import '../constants/design_constants.dart';
 import '../constants/route_constants.dart';
 import '../extensions/context_extensions.dart';
 
@@ -38,6 +39,7 @@ class _MaterialShim extends StatelessWidget {
       routerDelegate: kRouter.routerDelegate,
       onGenerateTitle: (BuildContext context) => context.localizations?.applicationName ?? '',
       supportedLocales: AppLocalizations.supportedLocales,
+      theme: kThemeData,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
