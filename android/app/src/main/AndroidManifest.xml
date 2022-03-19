@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pocketark">
+    package="com.inqvine.pocketark">
    <application
-        android:label="pocketark"
+        android:label="PocketArk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,4 +1,4 @@
-package com.example.pocketark
+package com.inqvine.pocketark
 
 import io.flutter.embedding.android.FlutterActivity
 
