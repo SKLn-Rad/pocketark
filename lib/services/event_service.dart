@@ -1,11 +1,14 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/proto/events.pb.dart';
 import 'package:quiver/collection.dart';
 
+// Project imports:
+import 'package:pocketark/proto/events.pb.dart';
 import '../events/events_updated_event.dart';
 
 class EventService extends InqvineServiceBase {

@@ -1,10 +1,15 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/views/splash/state/splash_view_model.dart';
 
-import '../../../widgets/scaffolds/pocketark_scaffold.dart';
+// Package imports:
+import 'package:inqvine_core_main/inqvine_core_main.dart';
+
+// Project imports:
+import 'package:pocketark/constants/design_constants.dart';
+import 'package:pocketark/views/splash/state/splash_view_model.dart';
 import '../../../extensions/context_extensions.dart';
+import '../../../widgets/indicators/pocketark_loading_indicator.dart';
+import '../../../widgets/scaffolds/pocketark_scaffold.dart';
 
 class SplashView extends HookConsumerWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -17,8 +22,8 @@ class SplashView extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SpinKitSpinningCircle(color: Colors.white),
-            const SizedBox(height: 10.0),
+            const PocketArkLoadingIndicator(),
+            kSpacingMedium.asHeightWidget,
             Text(context.localizations?.pageSplashCaption ?? ''),
           ],
         ),
