@@ -1,8 +1,11 @@
-// ignore_for_file: lines_longer_than_80_chars
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+// Flutter imports:
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
+// Package imports:
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+
+// Project imports:
 import 'package:pocketark/services/application_service.dart';
 
 class DefaultFirebaseOptions {
@@ -40,37 +43,37 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions androidDevelopment = FirebaseOptions(
     apiKey: 'AIzaSyCwDgvloiYJbLU33KA6kzsfn3_5FtB2TC4',
-    googleAppID: '1:26568019563:android:b3ed591b80e37e8ad5eb2e',
-    gcmSenderID: '26568019563',
-    projectID: 'pocketark-development',
+    appId: '1:26568019563:android:b3ed591b80e37e8ad5eb2e',
+    messagingSenderId: '26568019563',
+    projectId: 'pocketark-development',
     storageBucket: 'pocketark-development.appspot.com',
   );
 
   static const FirebaseOptions iosDevelopment = FirebaseOptions(
     apiKey: 'AIzaSyCwDgvloiYJbLU33KA6kzsfn3_5FtB2TC4',
-    googleAppID: '1:26568019563:android:b3ed591b80e37e8ad5eb2e',
-    gcmSenderID: '26568019563',
-    projectID: 'pocketark-development',
+    appId: '1:26568019563:android:b3ed591b80e37e8ad5eb2e',
+    messagingSenderId: '26568019563',
+    projectId: 'pocketark-development',
     storageBucket: 'pocketark-development.appspot.com',
-    clientID: '26568019563-kv8ohkr0hmpvltof2p6k2o2pa3jidb3d.apps.googleusercontent.com',
-    bundleID: 'com.inqvine.pocketark',
+    iosClientId: '26568019563-kv8ohkr0hmpvltof2p6k2o2pa3jidb3d.apps.googleusercontent.com',
+    iosBundleId: 'com.inqvine.pocketark',
   );
 
   static const FirebaseOptions androidProduction = FirebaseOptions(
     apiKey: 'AIzaSyCFKVsn_kuFm78PKG-vXJoIpoUufDwFLlk',
-    googleAppID: '1:237512204819:android:46d6325b0369b00d1ed5e6',
-    gcmSenderID: '237512204819',
-    projectID: 'pocketark-production',
+    appId: '1:237512204819:android:46d6325b0369b00d1ed5e6',
+    messagingSenderId: '237512204819',
+    projectId: 'pocketark-production',
     storageBucket: 'pocketark-production.appspot.com',
   );
 
   static const FirebaseOptions iosProduction = FirebaseOptions(
     apiKey: 'AIzaSyC4t0Szk1aXbKLvFxYgi-Ya0sLjyQXBHPI',
-    googleAppID: '1:237512204819:ios:25053bdf78d221c01ed5e6',
-    gcmSenderID: '237512204819',
-    projectID: 'pocketark-production',
+    appId: '1:237512204819:ios:25053bdf78d221c01ed5e6',
+    messagingSenderId: '237512204819',
+    projectId: 'pocketark-production',
     storageBucket: 'pocketark-production.appspot.com',
-    clientID: '237512204819-343id80q441gqc2r62cd0oq2ldmkfslj.apps.googleusercontent.com',
-    bundleID: 'com.inqvine.pocketark',
+    iosClientId: '237512204819-343id80q441gqc2r62cd0oq2ldmkfslj.apps.googleusercontent.com',
+    iosBundleId: 'com.inqvine.pocketark',
   );
 }
