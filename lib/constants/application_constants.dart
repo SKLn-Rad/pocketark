@@ -1,1 +1,1 @@
-const String kApplicationName = 'Pocketark';
+const String kApplicationName = 'PocketArk';
