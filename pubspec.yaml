@@ -9,8 +9,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
+  # State
   inqvine_core_main: ^1.2.0
+
+  # UI
+
+  # Other
+  intl: ^0.17.0
+  mocktail: ^0.3.0
 
 dev_dependencies:
   flutter_test:
@@ -20,3 +29,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
