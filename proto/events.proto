@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message LostArkEvent {
+    int32 id = 1;
+    int32 type = 2;
+    int32 rec_item_level = 3;
+    string icon_path = 4;
+
+    repeated LostArkEventSchedule schedule = 5;
+
+    message LostArkEventSchedule {
+        int32 time = 1;
+        int32 day = 2;
+        int32 month = 3;
+    }
+}
