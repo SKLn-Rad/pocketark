@@ -10,11 +10,13 @@ class PocketArkScaffold extends StatelessWidget {
     required this.body,
     this.appBar,
     this.systemUiOverlayStyle,
+    this.bottomNavigationBar,
     Key? key,
   }) : super(key: key);
 
   final SystemUiOverlayStyle? systemUiOverlayStyle;
 
+  final BottomNavigationBar? bottomNavigationBar;
   final PreferredSizeWidget? appBar;
   final Widget body;
 
@@ -32,7 +34,7 @@ class PocketArkScaffold extends StatelessWidget {
       statusBarBrightness: Brightness.light,
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: context.theme.scaffoldBackgroundColor,
+      systemNavigationBarColor: bottomNavigationBar != null ? context.theme.bottomNavigationBarTheme.backgroundColor : context.theme.scaffoldBackgroundColor,
       statusBarColor: Colors.transparent,
       systemNavigationBarContrastEnforced: false,
       systemStatusBarContrastEnforced: false,
@@ -45,6 +47,7 @@ class PocketArkScaffold extends StatelessWidget {
         child: Scaffold(
           appBar: appBar,
           body: body,
+          bottomNavigationBar: bottomNavigationBar,
         ),
       ),
     );

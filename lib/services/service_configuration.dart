@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
@@ -36,6 +37,7 @@ Future<void> configurePocketArkServices() async {
   await inqvine.registerService(EventService());
   await inqvine.registerService(EventAdminService());
   await inqvine.registerService(SystemService());
+  await inqvine.registerService(AuthService());
 }
 
 mixin PocketArkServiceMixin {
@@ -44,6 +46,7 @@ mixin PocketArkServiceMixin {
   EventService get eventService => inqvine.getFromLocator();
   EventAdminService get eventAdminService => inqvine.getFromLocator();
   SystemService get systemService => inqvine.getFromLocator();
+  AuthService get authService => inqvine.getFromLocator();
 
   // Third Party Services
   FirebaseApp get firebaseApp => inqvine.getFromLocator();
