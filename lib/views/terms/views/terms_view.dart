@@ -1,14 +1,18 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
-import '../../../views/terms/state/terms_view_model.dart';
+// Project imports:
+import '../../../constants/application_constants.dart';
 import '../../../constants/design_constants.dart';
 import '../../../constants/legal_constants.dart';
-import '../../../constants/application_constants.dart';
-import '../../../widgets/scaffolds/pocketark_scaffold.dart';
 import '../../../extensions/context_extensions.dart';
+import '../../../views/terms/state/terms_view_model.dart';
+import '../../../widgets/scaffolds/pocketark_scaffold.dart';
 
 class TermsView extends HookConsumerWidget {
   const TermsView({Key? key}) : super(key: key);

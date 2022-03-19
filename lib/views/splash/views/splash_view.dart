@@ -1,12 +1,15 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+// Package imports:
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+
+// Project imports:
 import 'package:pocketark/constants/design_constants.dart';
 import 'package:pocketark/views/splash/state/splash_view_model.dart';
-
+import '../../../extensions/context_extensions.dart';
 import '../../../widgets/indicators/pocketark_loading_indicator.dart';
 import '../../../widgets/scaffolds/pocketark_scaffold.dart';
-import '../../../extensions/context_extensions.dart';
 
 class SplashView extends HookConsumerWidget {
   const SplashView({Key? key}) : super(key: key);

@@ -1,7 +1,11 @@
+// Dart imports:
 import 'dart:io';
 
-import 'package:pocketark/resources/resources.dart';
+// Package imports:
 import 'package:test/test.dart';
+
+// Project imports:
+import 'package:pocketark/resources/resources.dart';
 
 void main() {
   test('pocket_ark_images assets test', () {
