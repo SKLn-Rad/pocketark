@@ -8,7 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 // Project imports:
 import '../constants/application_constants.dart';
 import '../extensions/context_extensions.dart';
-import '../views/home/views/home_view.dart';
+import '../views/splash/views/splash_view.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: child ?? const HomeView(),
+      home: child ?? const SplashView(),
     );
   }
 }

@@ -6,17 +6,22 @@ service cloud.firestore {
     }
 
     function isAdminUser() {
-      return request.auth.uid != null && request.auth.token.level in ["admin"];
+      return isLoggedIn() && exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
     }
 
     match /admin_users/{document} {
-      allow read: if matchesDocumentId();
+      allow read: if isAdminUser();
       allow write: if false;
     }
 
     match /events/{document} {
       allow read: if isLoggedIn();
       allow write: if isAdminUser();
+    }
+
+    match /system_status/{document} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }
