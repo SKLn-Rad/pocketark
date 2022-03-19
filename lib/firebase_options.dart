@@ -2,6 +2,8 @@
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/services/application_service.dart';
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
@@ -12,12 +14,18 @@ class DefaultFirebaseOptions {
       );
     }
 
+    ApplicationEnvironment environment = ApplicationEnvironment.development;
+    if (inqvine.isRegisteredInLocator<ApplicationEnvironment>()) {
+      environment = inqvine.getFromLocator();
+      'Setting up environment: $environment'.logInfo();
+    }
+
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return androidProduction;
+        return environment == ApplicationEnvironment.development ? androidDevelopment : androidProduction;
       case TargetPlatform.iOS:
-        return iosProduction;
+        return environment == ApplicationEnvironment.development ? iosDevelopment : iosProduction;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
