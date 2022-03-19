@@ -12,17 +12,24 @@ final ThemeData kThemeData = ThemeData(
 );
 
 final TextTheme kTextTheme = TextTheme(
-  headline1: GoogleFonts.notoSans(fontSize: 113, fontWeight: FontWeight.w300, letterSpacing: -1.5),
-  headline2: GoogleFonts.notoSans(fontSize: 71, fontWeight: FontWeight.w300, letterSpacing: -0.5),
-  headline3: GoogleFonts.notoSans(fontSize: 57, fontWeight: FontWeight.w400),
-  headline4: GoogleFonts.notoSans(fontSize: 40, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-  headline5: GoogleFonts.notoSans(fontSize: 28, fontWeight: FontWeight.w400),
-  headline6: GoogleFonts.notoSans(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15),
-  subtitle1: GoogleFonts.notoSans(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15),
-  subtitle2: GoogleFonts.notoSans(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-  bodyText1: GoogleFonts.merriweather(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-  bodyText2: GoogleFonts.merriweather(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-  button: GoogleFonts.merriweather(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-  caption: GoogleFonts.merriweather(fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-  overline: GoogleFonts.merriweather(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+  headline1: GoogleFonts.notoSans(fontSize: 113, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
+  headline2: GoogleFonts.notoSans(fontSize: 71, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
+  headline3: GoogleFonts.notoSans(fontSize: 57, fontWeight: FontWeight.w400, color: Colors.white),
+  headline4: GoogleFonts.notoSans(fontSize: 40, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
+  headline5: GoogleFonts.notoSans(fontSize: 28, fontWeight: FontWeight.w400, color: Colors.white),
+  headline6: GoogleFonts.notoSans(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
+  subtitle1: GoogleFonts.notoSans(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
+  subtitle2: GoogleFonts.notoSans(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
+  bodyText1: GoogleFonts.merriweather(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.5, color: Colors.white),
+  bodyText2: GoogleFonts.merriweather(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
+  button: GoogleFonts.merriweather(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 1.25, color: Colors.white),
+  caption: GoogleFonts.merriweather(fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: 0.4, color: Colors.white),
+  overline: GoogleFonts.merriweather(fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5, color: Colors.white),
 );
+
+// Spacings
+const double kSpacingTiny = 5.0;
+const double kSpacingSmall = 10.0;
+const double kSpacingMedium = 15.0;
+const double kSpacingLarge = 20.0;
+const double kSpacingExtraLarge = 30.0;

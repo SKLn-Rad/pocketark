@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:pocketark/services/event_admin_service.dart';
 import 'package:pocketark/services/event_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import '../firebase_options.dart';
@@ -24,6 +25,9 @@ Future<void> configurePocketArkServices() async {
   inqvine.registerInLocator<FirebaseFirestore>(FirebaseFirestore.instance);
   inqvine.registerInLocator<FirebaseAuth>(FirebaseAuth.instance);
 
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  inqvine.registerInLocator(sharedPreferences);
+
   // Core Services
   await inqvine.registerService(ApplicationService());
   await inqvine.registerService(EventService());
@@ -40,4 +44,5 @@ mixin PocketArkServiceMixin {
   FirebaseApp get firebaseApp => inqvine.getFromLocator();
   FirebaseFirestore get firebaseFirestore => inqvine.getFromLocator();
   FirebaseAuth get firebaseAuth => inqvine.getFromLocator();
+  SharedPreferences get sharedPreferences => inqvine.getFromLocator();
 }
