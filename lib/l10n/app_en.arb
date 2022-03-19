@@ -1,5 +1,10 @@
 {
     "@@locale": "en",
 
-    "applicationName": "PocketArk"
+    "applicationName": "PocketArk",
+
+    "pageSplashCaption": "Loading...",
+    "@pageSplashCaption": {
+        "description": "Center description on the splash screen to let the user know the app is loading"
+    }
 }
