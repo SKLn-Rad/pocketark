@@ -6,7 +6,12 @@ import '../views/home/views/home_view.dart';
 import '../extensions/context_extensions.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({
+    this.child,
+    Key? key,
+  }) : super(key: key);
+
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class App extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomeView(),
+      home: child ?? const HomeView(),
     );
   }
 }
