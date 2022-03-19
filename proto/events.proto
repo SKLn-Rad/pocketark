@@ -5,8 +5,9 @@ message LostArkEvent {
     int32 type = 2;
     int32 rec_item_level = 3;
     string icon_path = 4;
+    string fallback_name = 5;
 
-    repeated LostArkEventSchedule schedule = 5;
+    repeated LostArkEventSchedule schedule = 6;
 
     message LostArkEventSchedule {
         int64 time_start = 1;

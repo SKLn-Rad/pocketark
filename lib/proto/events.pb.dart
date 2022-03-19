@@ -77,7 +77,8 @@ class LostArkEvent extends $pb.GeneratedMessage {
     ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.O3)
     ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'recItemLevel', $pb.PbFieldType.O3)
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'iconPath')
-    ..pc<LostArkEvent_LostArkEventSchedule>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'schedule', $pb.PbFieldType.PM, subBuilder: LostArkEvent_LostArkEventSchedule.create)
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'fallbackName')
+    ..pc<LostArkEvent_LostArkEventSchedule>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'schedule', $pb.PbFieldType.PM, subBuilder: LostArkEvent_LostArkEventSchedule.create)
     ..hasRequiredFields = false
   ;
 
@@ -87,6 +88,7 @@ class LostArkEvent extends $pb.GeneratedMessage {
     $core.int? type,
     $core.int? recItemLevel,
     $core.String? iconPath,
+    $core.String? fallbackName,
     $core.Iterable<LostArkEvent_LostArkEventSchedule>? schedule,
   }) {
     final _result = create();
@@ -101,6 +103,9 @@ class LostArkEvent extends $pb.GeneratedMessage {
     }
     if (iconPath != null) {
       _result.iconPath = iconPath;
+    }
+    if (fallbackName != null) {
+      _result.fallbackName = fallbackName;
     }
     if (schedule != null) {
       _result.schedule.addAll(schedule);
@@ -165,6 +170,15 @@ class LostArkEvent extends $pb.GeneratedMessage {
   void clearIconPath() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.List<LostArkEvent_LostArkEventSchedule> get schedule => $_getList(4);
+  $core.String get fallbackName => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set fallbackName($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasFallbackName() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearFallbackName() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.List<LostArkEvent_LostArkEventSchedule> get schedule => $_getList(5);
 }
 

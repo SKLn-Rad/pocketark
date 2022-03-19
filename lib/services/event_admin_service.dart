@@ -8,6 +8,9 @@ import '../proto/events.pb.dart';
 import 'package:fixnum/fixnum.dart';
 
 class EventAdminService extends InqvineServiceBase {
+  final Map<String, dynamic> cachedJsonData = <String, dynamic>{};
+  final Map<String, dynamic> cachedJsonMetadata = <String, dynamic>{};
+
   final Map<int, LostArkEvent> knownAdminEvents = <int, LostArkEvent>{};
 
   final Map<int, dynamic> eventParseCache = <int, dynamic>{};
@@ -93,13 +96,19 @@ class EventAdminService extends InqvineServiceBase {
     event.id = eventId;
     event.type = eventType;
     event.recItemLevel = eventItemLevel;
-    event.iconPath = "";
+
+    // Attempt to find fallback name and icon path
+    if (cachedJsonMetadata.containsKey(eventId)) {
+      event.fallbackName = cachedJsonMetadata[eventId][0];
+      event.iconPath = cachedJsonMetadata[eventId][1];
+    }
 
     final LostArkEvent_LostArkEventSchedule schedule = LostArkEvent_LostArkEventSchedule.create();
     schedule.timeStart = Int64(startTime.millisecondsSinceEpoch);
     if (isRange) {
       schedule.timeEnd = Int64(endTime!.millisecondsSinceEpoch);
     }
+
     event.schedule.add(schedule);
     knownAdminEvents[eventId] = event;
   }
@@ -118,12 +127,17 @@ class EventAdminService extends InqvineServiceBase {
     }
 
     // Get event data
-    final String response = await rootBundle.loadString("assets/data.json");
-    final Map<String, dynamic> rawData = json.decode(response);
+    final String dataResponse = await rootBundle.loadString("assets/data.json");
+    final String eventResponse = await rootBundle.loadString("assets/events.json");
+
+    cachedJsonData.clear();
+    cachedJsonMetadata.clear();
+    cachedJsonData.addAll(json.decode(dataResponse));
+    cachedJsonMetadata.addAll(json.decode(eventResponse));
 
     eventParseCache.clear();
     eventParseResults.clear();
-    visitEventData(rawData);
+    visitEventData(cachedJsonData);
 
     // Normalise event data
     knownAdminEvents.clear();

@@ -16,7 +16,8 @@ const LostArkEvent$json = const {
     const {'1': 'type', '3': 2, '4': 1, '5': 5, '10': 'type'},
     const {'1': 'rec_item_level', '3': 3, '4': 1, '5': 5, '10': 'recItemLevel'},
     const {'1': 'icon_path', '3': 4, '4': 1, '5': 9, '10': 'iconPath'},
-    const {'1': 'schedule', '3': 5, '4': 3, '5': 11, '6': '.LostArkEvent.LostArkEventSchedule', '10': 'schedule'},
+    const {'1': 'fallback_name', '3': 5, '4': 1, '5': 9, '10': 'fallbackName'},
+    const {'1': 'schedule', '3': 6, '4': 3, '5': 11, '6': '.LostArkEvent.LostArkEventSchedule', '10': 'schedule'},
   ],
   '3': const [LostArkEvent_LostArkEventSchedule$json],
 };
@@ -31,4 +32,4 @@ const LostArkEvent_LostArkEventSchedule$json = const {
 };
 
 /// Descriptor for `LostArkEvent`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List lostArkEventDescriptor = $convert.base64Decode('CgxMb3N0QXJrRXZlbnQSDgoCaWQYASABKAVSAmlkEhIKBHR5cGUYAiABKAVSBHR5cGUSJAoOcmVjX2l0ZW1fbGV2ZWwYAyABKAVSDHJlY0l0ZW1MZXZlbBIbCglpY29uX3BhdGgYBCABKAlSCGljb25QYXRoEj4KCHNjaGVkdWxlGAUgAygLMiIuTG9zdEFya0V2ZW50Lkxvc3RBcmtFdmVudFNjaGVkdWxlUghzY2hlZHVsZRpQChRMb3N0QXJrRXZlbnRTY2hlZHVsZRIdCgp0aW1lX3N0YXJ0GAEgASgDUgl0aW1lU3RhcnQSGQoIdGltZV9lbmQYAiABKANSB3RpbWVFbmQ=');
+final $typed_data.Uint8List lostArkEventDescriptor = $convert.base64Decode('CgxMb3N0QXJrRXZlbnQSDgoCaWQYASABKAVSAmlkEhIKBHR5cGUYAiABKAVSBHR5cGUSJAoOcmVjX2l0ZW1fbGV2ZWwYAyABKAVSDHJlY0l0ZW1MZXZlbBIbCglpY29uX3BhdGgYBCABKAlSCGljb25QYXRoEiMKDWZhbGxiYWNrX25hbWUYBSABKAlSDGZhbGxiYWNrTmFtZRI+CghzY2hlZHVsZRgGIAMoCzIiLkxvc3RBcmtFdmVudC5Mb3N0QXJrRXZlbnRTY2hlZHVsZVIIc2NoZWR1bGUaUAoUTG9zdEFya0V2ZW50U2NoZWR1bGUSHQoKdGltZV9zdGFydBgBIAEoA1IJdGltZVN0YXJ0EhkKCHRpbWVfZW5kGAIgASgDUgd0aW1lRW5k');
