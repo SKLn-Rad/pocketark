@@ -1,16 +1,21 @@
+import 'package:flutter/services.dart';
 import 'package:inqvine_core_firebase/inqvine_core_firebase.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:pocketark/proto/events.pb.dart';
 import 'package:pocketark/services/event_service.dart';
+import 'dart:convert';
 
 class EventAdminService extends InqvineServiceBase {
   Future<void> uploadNewEvents() async {
     final FirebaseAuth firebaseAuth = inqvine.getFromLocator();
     if (firebaseAuth.currentUser == null) {
-      await firebaseAuth.signInWithEmailAndPassword(email: '', password: '');
+      await firebaseAuth.signInWithEmailAndPassword(email: 'test@inqvine.com', password: '123456');
     }
 
     // Get event data
+    final String response = await rootBundle.loadString("assets/data.json");
+    final Map<String, dynamic> rawData = json.decode(response);
+    print(rawData);
 
     // Normalise event data
     final List<LostArkEvent> events = <LostArkEvent>[];
