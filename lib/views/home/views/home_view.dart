@@ -9,6 +9,7 @@ import '../../../extensions/context_extensions.dart';
 import '../../../resources/resources.dart';
 import '../../../constants/design_constants.dart';
 import '../../../widgets/scaffolds/pocketark_scaffold.dart';
+import '../components/home_component_pager_events.dart';
 import '../components/home_component_pager_home.dart';
 
 class HomeView extends HookConsumerWidget {
@@ -30,7 +31,7 @@ class HomeView extends HookConsumerWidget {
         onPageChanged: (int index) => viewModel.onPageUpdated(index, shouldAttemptAnimate: false),
         children: <Widget>[
           HomeComponentPagerHome(viewModel: viewModel),
-          Container(color: Colors.green),
+          HomeComponentPagerEvents(viewModel: viewModel),
           Container(color: Colors.blue),
         ],
       ),

@@ -26,6 +26,7 @@ dependencies:
   flutter_markdown: ^0.6.9
   flutter_svg: ^1.0.3
   ionicons: ^0.1.2
+  inqvine_core_ui: ^1.2.0
 
   # Other
   intl: ^0.17.0
