@@ -6,12 +6,16 @@ import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
+  brightness: Brightness.dark,
   textTheme: kTextTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: kPrimaryColor,
   ),
-  scaffoldBackgroundColor: kGrayDark,
+  scaffoldBackgroundColor: kGrayDarker,
   canvasColor: kGrayDarkest,
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: kPrimaryColor,
     selectedItemColor: Colors.white,
@@ -48,8 +52,8 @@ const Color kHighlightColor = Color(0xFF0B8CD1);
 const Color kGrayLighter = Color(0xFF929292);
 const Color kGrayLight = Color(0xFF666666);
 const Color kGrayDark = Color(0xFF2C313E);
-const Color kGrayDarker = Color(0xFF242933);
-const Color kGrayDarkest = Color(0xFF111318);
+const Color kGrayDarker = Color.fromARGB(255, 32, 33, 36);
+const Color kGrayDarkest = Color.fromARGB(255, 18, 18, 19);
 
 // Spacings
 const double kSpacingTiny = 5.0;

@@ -8,13 +8,32 @@
     "pageLegalButtonContinue": "Let's go!",
 
     "pageHomeComponentHomeHeadingComingSoon": "Coming soon!",
-    "pageHomeComponentHomeCaptionVisitUs": "Check out our GitHub for more details",
+    "pageHomeComponentHomeCaptionVisitUs": "Check out our GitHub for more details.",
+
+    "pageHomeComponentSettingsFilterHeading": "Filter settings",
+    "pageHomeComponentSettingsFilterSubheading": "Update event filters, and reminders.",
+    "pageHomeComponentSettingsFilterTooltipsTimezone": "Timezone:",
+
+    "pageHomeComponentSettingsSystemHeading": "System settings",
+    "pageHomeComponentSettingsSystemSubheading": "Update system and device preferences.",
+
+    "pageHomeComponentSettingsButtonResetCache": "Reset cache",
+    "pageHomeComponentSettingsResetCacheBody": "Your cache data has been cleared.",
 
     "pageHomeNavBarLabelHome": "Home",
     "pageHomeNavBarLabelEvents": "Events",
     "pageHomeNavBarLabelSettings": "Settings",
 
+    "sharedDialogsHeadingsSuccess": "Success!",
     "sharedActionsRetry": "Retry",
+    "sharedActionsContinue": "Continue",
 
-    "errorsNotConnected": "Failed to connect to server"
+    "sharedTimezonesUSWest": "US West (UTC-7)",
+    "sharedTimezonesUSEast": "US East (UTC-4)",
+    "sharedTimezonesEUCentral": "EU Central (UTC+1)",
+    "sharedTimezonesEUWest": "EU West (UTC-0)",
+    "sharedTimezonesSA": "South America (UTC-4)",
+    "sharedTimezonesServerTime": "Server time",
+
+    "errorsNotConnected": "Failed to connect to server."
 }

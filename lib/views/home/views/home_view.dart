@@ -11,6 +11,7 @@ import '../../../constants/design_constants.dart';
 import '../../../widgets/scaffolds/pocketark_scaffold.dart';
 import '../components/home_component_pager_events.dart';
 import '../components/home_component_pager_home.dart';
+import '../components/home_component_pager_settings.dart';
 
 class HomeView extends HookConsumerWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class HomeView extends HookConsumerWidget {
         children: <Widget>[
           HomeComponentPagerHome(viewModel: viewModel),
           HomeComponentPagerEvents(viewModel: viewModel),
-          Container(color: Colors.blue),
+          HomeComponentPagerSettings(viewModel: viewModel),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

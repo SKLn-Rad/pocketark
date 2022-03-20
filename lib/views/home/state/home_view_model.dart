@@ -1,13 +1,20 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/services/service_configuration.dart';
-
+import 'package:pocketark/events/events_updated_event.dart';
+import 'package:pocketark/events/timezone_updated_event.dart';
+import '../../../extensions/context_extensions.dart';
+import '../../../services/service_configuration.dart';
 import '../../../proto/events.pb.dart';
 
 class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
   final PageController currentPageController = PageController(initialPage: 1);
+
+  StreamSubscription<EventsUpdatedEvent>? streamSubscriptionEvents;
+  StreamSubscription<TimezoneUpdatedEvent>? streamSubscriptionTimezone;
 
   int _currentHomeIndex = 1;
   int get currentHomeIndex => _currentHomeIndex;
@@ -30,6 +37,37 @@ class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
   @override
   void onFirstRender() {
     super.onFirstRender();
-    authService.attemptAnonymousLogin();
+    bootstrap();
+  }
+
+  Future<void> bootstrap() async {
+    await streamSubscriptionEvents?.cancel();
+    await streamSubscriptionTimezone?.cancel();
+    streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen((_) => notifyListeners());
+    streamSubscriptionTimezone = inqvine.getEventStream<TimezoneUpdatedEvent>().listen((_) => notifyListeners());
+  }
+
+  Future<void> onResetCacheRequested(BuildContext context) async {
+    final AppLocalizations? localizations = context.localizations;
+    if (localizations == null) {
+      return;
+    }
+
+    await systemService.resetCache();
+    await showCupertinoDialog(
+      context: context,
+      builder: (_) {
+        return CupertinoAlertDialog(
+          title: Text(localizations.sharedDialogsHeadingsSuccess),
+          content: Text(localizations.pageHomeComponentSettingsResetCacheBody),
+          actions: <Widget>[
+            CupertinoButton(
+              child: Text(localizations.sharedActionsContinue),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
