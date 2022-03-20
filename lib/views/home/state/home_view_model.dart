@@ -57,7 +57,7 @@ class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
 
   Future<void> onSetDateRequested(BuildContext context) async {
     final DateTime currentDateTime = DateTime.now().toUtc();
-    final DateTime? newDate = await showDatePicker(
+    DateTime? newDate = await showDatePicker(
       context: context,
       initialDate: shownDateTime,
       firstDate: currentDateTime.subtract(const Duration(days: 7)),
@@ -73,6 +73,11 @@ class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
     if (newDate == null) {
       return;
     }
+
+    //* Set HMS as current
+    newDate = newDate.add(Duration(hours: currentDateTime.hour));
+    newDate = newDate.add(Duration(hours: currentDateTime.minute));
+    newDate = newDate.add(Duration(hours: currentDateTime.second));
 
     'Selected a new date: $newDate'.logInfo();
     shownDateTime = newDate;
