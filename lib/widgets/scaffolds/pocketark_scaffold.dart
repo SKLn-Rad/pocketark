@@ -4,13 +4,8 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:pocketark/constants/application_constants.dart';
-import 'package:pocketark/constants/design_constants.dart';
-import 'package:pocketark/constants/route_constants.dart';
 
 import 'pocketark_drawer.dart';
-import 'pocketark_drawer_header.dart';
 
 class PocketArkScaffold extends StatelessWidget {
   const PocketArkScaffold({
@@ -41,7 +36,7 @@ class PocketArkScaffold extends StatelessWidget {
       statusBarBrightness: Brightness.light,
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: bottomNavigationBar != null ? context.theme.bottomNavigationBarTheme.backgroundColor : context.theme.scaffoldBackgroundColor,
+      systemNavigationBarColor: context.theme.primaryColor,
       statusBarColor: Colors.transparent,
       systemNavigationBarContrastEnforced: false,
       systemStatusBarContrastEnforced: false,
