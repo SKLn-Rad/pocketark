@@ -7,14 +7,38 @@
 
     "pageLegalButtonContinue": "Let's go!",
 
-    "pageHomeComponentHomeHeadingComingSoon": "Coming soon!",
-    "pageHomeComponentHomeCaptionVisitUs": "Check out our GitHub for more details",
+    "pageEventsComponentsEventsCaptionShownDate": "Showing results from {date}",
+    "@pageEventsComponentsEventsCaptionShownDate" : {
+        "placeholders": {
+            "date": {}
+        }
+    },
 
-    "pageHomeNavBarLabelHome": "Home",
-    "pageHomeNavBarLabelEvents": "Events",
-    "pageHomeNavBarLabelSettings": "Settings",
+    "pageSettingsComponentSettingsFilterHeading": "Filter settings",
+    "pageSettingsComponentSettingsFilterSubheading": "Update event filters, and reminders.",
+    "pageSettingsComponentSettingsFilterTooltipsTimezone": "Timezone:",
 
+    "pageSettingsComponentSettingsSystemHeading": "System settings",
+    "pageSettingsComponentSettingsSystemSubheading": "Update system and device preferences.",
+
+    "pageSettingsComponentSettingsButtonResetCache": "Reset cache",
+    "pageSettingsComponentSettingsResetCacheBody": "Your cache data has been cleared.",
+
+    "pageSettingsComponentSettingsCreatorBody": "Made by inqVine.",
+
+    "pageBurgerMenuLabelEvents": "Events",
+    "pageBurgerMenuLabelSettings": "Settings",
+
+    "sharedDialogsHeadingsSuccess": "Success!",
     "sharedActionsRetry": "Retry",
+    "sharedActionsContinue": "Continue",
 
-    "errorsNotConnected": "Failed to connect to server"
+    "sharedTimezonesUSWest": "US West (UTC-7)",
+    "sharedTimezonesUSEast": "US East (UTC-4)",
+    "sharedTimezonesEUCentral": "EU Central (UTC+1)",
+    "sharedTimezonesEUWest": "EU West (UTC-0)",
+    "sharedTimezonesSA": "South America (UTC-4)",
+    "sharedTimezonesServerTime": "Server time",
+
+    "errorsNotConnected": "Failed to connect to server."
 }

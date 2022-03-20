@@ -6,12 +6,19 @@ import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
+  brightness: Brightness.dark,
   textTheme: kTextTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: kPrimaryColor,
   ),
-  scaffoldBackgroundColor: kGrayDark,
+  scaffoldBackgroundColor: kGrayDarker,
   canvasColor: kGrayDarkest,
+  dividerTheme: const DividerThemeData(
+    color: Colors.white,
+  ),
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: kPrimaryColor,
     selectedItemColor: Colors.white,
@@ -24,11 +31,11 @@ final ThemeData kThemeData = ThemeData(
 );
 
 final TextTheme kTextTheme = TextTheme(
-  headline1: GoogleFonts.carterOne(fontSize: 113, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
-  headline2: GoogleFonts.carterOne(fontSize: 71, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
-  headline3: GoogleFonts.carterOne(fontSize: 57, fontWeight: FontWeight.w400, color: Colors.white),
-  headline4: GoogleFonts.carterOne(fontSize: 40, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
-  headline5: GoogleFonts.carterOne(fontSize: 28, fontWeight: FontWeight.w400, color: Colors.white),
+  headline1: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
+  headline2: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
+  headline3: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
+  headline4: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
+  headline5: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
   headline6: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
   subtitle1: GoogleFonts.manrope(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
   subtitle2: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
@@ -48,10 +55,11 @@ const Color kHighlightColor = Color(0xFF0B8CD1);
 const Color kGrayLighter = Color(0xFF929292);
 const Color kGrayLight = Color(0xFF666666);
 const Color kGrayDark = Color(0xFF2C313E);
-const Color kGrayDarker = Color(0xFF242933);
-const Color kGrayDarkest = Color(0xFF111318);
+const Color kGrayDarker = Color.fromARGB(255, 32, 33, 36);
+const Color kGrayDarkest = Color.fromARGB(255, 18, 18, 19);
 
 // Spacings
+const double kSpacingPixel = 1.0;
 const double kSpacingTiny = 5.0;
 const double kSpacingSmall = 10.0;
 const double kSpacingMedium = 15.0;
