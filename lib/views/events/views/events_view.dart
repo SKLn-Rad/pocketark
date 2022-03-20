@@ -33,6 +33,16 @@ class EventsView extends HookConsumerWidget {
                   onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.selectDate),
                   child: Text(EventDropdownAction.selectDate.toLocale(context)),
                 ),
+                PopupMenuItem<EventDropdownAction>(
+                  value: EventDropdownAction.muteAllEvents,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.muteAllEvents),
+                  child: Text(EventDropdownAction.muteAllEvents.toLocale(context)),
+                ),
+                PopupMenuItem<EventDropdownAction>(
+                  value: EventDropdownAction.unmuteAllEvents,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.unmuteAllEvents),
+                  child: Text(EventDropdownAction.unmuteAllEvents.toLocale(context)),
+                ),
               ];
             },
           ),

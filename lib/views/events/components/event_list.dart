@@ -34,7 +34,8 @@ class EventList extends StatelessWidget {
       separatorBuilder: (_, __) => kSpacingMedium.asHeightWidget,
       itemBuilder: (_, int index) {
         final LostArkEvent event = localFilteredEvents[index];
-        return EventTile(event: event, isMuted: index % 2 == 0);
+        final bool isMuted = viewModel.eventService.isEventMuted(event);
+        return EventTile(event: event, isMuted: isMuted);
       },
     );
   }

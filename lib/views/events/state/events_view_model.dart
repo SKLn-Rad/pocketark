@@ -11,6 +11,8 @@ import '../../../proto/events.pb.dart';
 
 enum EventDropdownAction {
   selectDate,
+  unmuteAllEvents,
+  muteAllEvents,
 }
 
 extension EventDropdownActionExtensions on EventDropdownAction {
@@ -19,6 +21,10 @@ extension EventDropdownActionExtensions on EventDropdownAction {
     switch (this) {
       case EventDropdownAction.selectDate:
         return localizations!.pageEventsComponentsAppBarActionsSelectDate;
+      case EventDropdownAction.unmuteAllEvents:
+        return localizations!.pageEventsComponentsAppBarActionsUnmuteAll;
+      case EventDropdownAction.muteAllEvents:
+        return localizations!.pageEventsComponentsAppBarActionsMuteAll;
     }
   }
 }
@@ -55,10 +61,17 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     }
 
     'Handling action: $action'.logDebug();
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+
     switch (action) {
       case EventDropdownAction.selectDate:
-        await Future<void>.delayed(const Duration(milliseconds: 250));
         await onSetDateRequested(context);
+        break;
+      case EventDropdownAction.unmuteAllEvents:
+        await eventService.unmuteAllEvents();
+        break;
+      case EventDropdownAction.muteAllEvents:
+        await eventService.muteAllEvents();
         break;
     }
   }
@@ -88,6 +101,7 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   }
 
   Future<void> filterEvents(EventsUpdatedEvent event) => handleAction(() async {
+        notifyListeners();
         if (!event.shouldSort) {
           return;
         }
