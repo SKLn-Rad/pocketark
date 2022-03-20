@@ -4,13 +4,17 @@ import 'dart:async';
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/constants/application_constants.dart';
-import 'package:pocketark/services/service_configuration.dart';
+import 'package:pocketark/constants/route_constants.dart';
 import 'package:quiver/collection.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 // Project imports:
-import 'package:pocketark/proto/events.pb.dart';
+import '../constants/application_constants.dart';
+import '../services/service_configuration.dart';
+import '../extensions/event_extensions.dart';
+import '../proto/events.pb.dart';
 import '../events/events_updated_event.dart';
 
 class EventService extends InqvineServiceBase with PocketArkServiceMixin {
@@ -64,6 +68,57 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
 
     'Found ${events.length} new events'.logInfo();
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
+    unawaited(scheduleNotifications());
+  }
+
+  Future<void> scheduleNotifications() async {
+    // Unschedule all notifications
+    await localNotifications.cancelAll();
+
+    // Loop and check if muted
+    int notificationId = 0;
+    for (final LostArkEvent event in events.values) {
+      if (isEventMuted(event)) {
+        return;
+      }
+
+      for (final LostArkEvent_LostArkEventSchedule schedule in event.schedule) {
+        final tz.TZDateTime scheduleTime = tz.TZDateTime.fromMillisecondsSinceEpoch(tz.UTC, schedule.timeStart.toInt()).subtract(const Duration(minutes: 15));
+        final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
+
+        //* Do not schedule in the past (Add one second for logic completion)
+        if (currentTime.millisecondsSinceEpoch > scheduleTime.millisecondsSinceEpoch - 1000) {
+          continue;
+        }
+
+        //* Do not schedule too far into the future (6 hours)
+        if (currentTime.millisecondsSinceEpoch + (1000 * 60 * 60 * 12) > scheduleTime.millisecondsSinceEpoch) {
+          continue;
+        }
+
+        await localNotifications.zonedSchedule(
+          notificationId,
+          event.eventNameWithItemLevel,
+          'Event is starting in 15 minutes',
+          scheduleTime,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(kApplicationName, kApplicationName),
+            iOS: IOSNotificationDetails(threadIdentifier: kApplicationName),
+          ),
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          androidAllowWhileIdle: true,
+        );
+
+        notificationId++;
+
+        //* Break if too many notifications are schedules
+        if (notificationId > 400) {
+          break;
+        }
+      }
+    }
+
+    'Scheduled notifications successfully'.logDebug();
   }
 
   bool isEventMuted(LostArkEvent event) {

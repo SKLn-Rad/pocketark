@@ -7,6 +7,7 @@ import 'package:transparent_image/transparent_image.dart';
 import '../../../extensions/event_extensions.dart';
 import '../../../constants/design_constants.dart';
 import '../../../proto/events.pb.dart';
+import '../../constants/application_constants.dart';
 
 class EventTile extends StatefulWidget {
   const EventTile({
@@ -73,7 +74,7 @@ class _EventTileState extends State<EventTile> {
                   width: kImageRadius,
                   color: kGrayLighter,
                   child: FadeInImage(
-                    image: NetworkImage("https://lostarkcodex.com/icons/" + widget.event.iconPath),
+                    image: NetworkImage('$kEventIconPrefix${widget.event.iconPath}'),
                     placeholder: MemoryImage(kTransparentImage),
                   ),
                 ),
