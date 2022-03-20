@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions iosDevelopment = FirebaseOptions(
     apiKey: 'AIzaSyCwDgvloiYJbLU33KA6kzsfn3_5FtB2TC4',
-    appId: '1:26568019563:android:b3ed591b80e37e8ad5eb2e',
+    appId: '1:26568019563:ios:122ded1ab3948ffcd5eb2e',
     messagingSenderId: '26568019563',
     projectId: 'pocketark-development',
     storageBucket: 'pocketark-development.appspot.com',

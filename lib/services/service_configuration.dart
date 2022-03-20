@@ -21,8 +21,9 @@ Future<void> configurePocketArkServices() async {
   await inqvine.registerInqvineServices();
 
   // Third Party Services
+  final FirebaseOptions firebaseOptions = DefaultFirebaseOptions.currentPlatform;
   final FirebaseApp firebaseApp = await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: firebaseOptions,
   );
 
   inqvine.registerInLocator<FirebaseApp>(firebaseApp);
