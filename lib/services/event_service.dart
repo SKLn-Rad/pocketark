@@ -5,13 +5,15 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/constants/application_constants.dart';
+import 'package:pocketark/services/service_configuration.dart';
 import 'package:quiver/collection.dart';
 
 // Project imports:
 import 'package:pocketark/proto/events.pb.dart';
 import '../events/events_updated_event.dart';
 
-class EventService extends InqvineServiceBase {
+class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   static const String kEventCollectionName = 'events';
   static CollectionReference get kEventCollection => inqvine.getFromLocator<FirebaseFirestore>().collection(EventService.kEventCollectionName);
 
@@ -41,7 +43,7 @@ class EventService extends InqvineServiceBase {
     'Detected user change from $runtimeType'.logInfo();
     await eventsSubscription?.cancel();
     events.clear();
-    inqvine.publishEvent(EventsUpdatedEvent());
+    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
 
     if (user == null) {
       return;
@@ -61,6 +63,37 @@ class EventService extends InqvineServiceBase {
     }
 
     'Found ${events.length} new events'.logInfo();
-    inqvine.publishEvent(EventsUpdatedEvent());
+    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
+  }
+
+  bool isEventMuted(LostArkEvent event) {
+    final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
+    return sharedPreferences.containsKey(sharedKey) && sharedPreferences.getBool(sharedKey) == true;
+  }
+
+  Future<void> unmuteAllEvents() async {
+    for (final LostArkEvent event in events.values) {
+      await unmuteEvent(event);
+    }
+  }
+
+  Future<void> muteAllEvents() async {
+    for (final LostArkEvent event in events.values) {
+      await muteEvent(event);
+    }
+  }
+
+  Future<void> unmuteEvent(LostArkEvent event) async {
+    'Unmuting event: ${event.fallbackName}'.logInfo();
+    final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
+    await sharedPreferences.setBool(sharedKey, false);
+    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+  }
+
+  Future<void> muteEvent(LostArkEvent event) async {
+    'Muting event: ${event.fallbackName}'.logInfo();
+    final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
+    await sharedPreferences.setBool(sharedKey, true);
+    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
   }
 }

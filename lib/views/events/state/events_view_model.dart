@@ -46,7 +46,7 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   Future<void> bootstrap() async {
     await streamSubscriptionEvents?.cancel();
     streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen(filterEvents);
-    filterEvents(EventsUpdatedEvent());
+    filterEvents(const EventsUpdatedEvent(shouldSort: true));
   }
 
   Future<void> onDropdownActionSelected(BuildContext context, EventDropdownAction? action) async {
@@ -84,10 +84,14 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
 
     'Selected a new date: $newDate'.logInfo();
     selectedDate = newDate;
-    inqvine.publishEvent(EventsUpdatedEvent());
+    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
   }
 
   Future<void> filterEvents(EventsUpdatedEvent event) => handleAction(() async {
+        if (!event.shouldSort) {
+          return;
+        }
+
         final Duration currentHour = Duration(hours: DateTime.now().hour);
         final Duration currentMinute = Duration(minutes: DateTime.now().minute);
         final DateTime compareDateTime = selectedDate.add(currentHour).add(currentMinute);

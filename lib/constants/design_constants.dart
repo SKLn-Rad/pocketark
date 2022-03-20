@@ -84,3 +84,10 @@ const double kSpacingExtraLarge = 30.0;
 // Icons
 const double kAppBarIconHeight = 42.0;
 const double kDecorationIconCenterHeight = 92.0;
+
+// Durations
+const Duration kBasicAnimationDuration = Duration(milliseconds: 250);
+
+// Opacities
+const double kEnabledOpacity = 1.0;
+const double kDisabledOpacity = 0.33;

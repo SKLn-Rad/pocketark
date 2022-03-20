@@ -10,3 +10,4 @@ const String kUrlInqvine = 'https://www.inqvine.com';
 // Shared Preference Keys
 const String kSharedKeySettingsTimezone = 'pocketark-settings-timezone';
 const String kSharedKeyTermsAccepted = 'pocketark-terms-accepted';
+const String kSharedKeyMutedEvent = 'pocketark-events-muted-';
