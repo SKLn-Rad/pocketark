@@ -8,10 +8,18 @@ import '../../../services/service_configuration.dart';
 import '../../../proto/events.pb.dart';
 
 class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
-  StreamSubscription<EventsUpdatedEvent>? streamSubscriptionEvents;
-
+  final TextEditingController searchController = TextEditingController();
   final List<LostArkEvent> filteredEvents = <LostArkEvent>[];
+
+  StreamSubscription<EventsUpdatedEvent>? streamSubscriptionEvents;
   DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  String _searchText = '';
+  String get searchText => _searchText;
+  set searchText(String val) {
+    _searchText = val;
+    notifyListeners();
+  }
 
   @override
   void onFirstRender() {

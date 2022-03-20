@@ -7,6 +7,8 @@ import 'package:pocketark/extensions/number_extensions.dart';
 import 'package:pocketark/proto/events.pb.dart';
 
 extension EventExtensions on LostArkEvent {
+  String get eventNameWithItemLevel => '[$recItemLevel] $fallbackName';
+
   String getEventTypeAsString(BuildContext context) {
     switch (type) {
       case 1:

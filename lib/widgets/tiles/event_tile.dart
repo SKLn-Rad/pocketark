@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../../../extensions/event_extensions.dart';
 import '../../../constants/design_constants.dart';
 import '../../../proto/events.pb.dart';
-import '../../../extensions/event_extensions.dart';
 
 class EventTile extends StatefulWidget {
   const EventTile({
@@ -51,7 +51,6 @@ class _EventTileState extends State<EventTile> {
 
   @override
   Widget build(BuildContext context) {
-    final String title = '[${widget.event.recItemLevel}] ${widget.event.fallbackName}';
     final String nextEventCaption = 'Next ${widget.event.getEventTypeAsString(context)} in:';
 
     return Card(
@@ -80,7 +79,7 @@ class _EventTileState extends State<EventTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    title,
+                    widget.event.eventNameWithItemLevel,
                     style: context.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                   ),
                   kSpacingTiny.asHeightWidget,

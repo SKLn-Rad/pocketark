@@ -13,7 +13,21 @@ final ThemeData kThemeData = ThemeData(
   ),
   scaffoldBackgroundColor: kGrayDarker,
   canvasColor: kGrayDarkest,
-  cardTheme: const CardTheme(color: kGrayDark),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: kGrayDarkest,
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 0.0,
+        style: BorderStyle.none,
+      ),
+      borderRadius: BorderRadius.circular(4.0),
+    ),
+  ),
+  cardTheme: const CardTheme(
+    color: kGrayDark,
+    margin: EdgeInsets.zero,
+  ),
   dividerTheme: const DividerThemeData(
     color: Colors.white,
   ),
