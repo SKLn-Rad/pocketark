@@ -1,15 +1,13 @@
 // Flutter imports:
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // Package imports:
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/resources/resources.dart';
 
 // Project imports:
+import '../../../resources/resources.dart';
 import '../../../constants/design_constants.dart';
 import '../../../views/splash/state/splash_view_model.dart';
 import '../../../extensions/context_extensions.dart';

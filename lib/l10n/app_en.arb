@@ -26,7 +26,11 @@
 
     "pageSettingsComponentSettingsCreatorBody": "Made by inqVine.",
 
+    "pageBurgerMenuSectionGame": "Game",
+    "pageBurgerMenuLabelResets": "Dailies / Weeklies",
     "pageBurgerMenuLabelEvents": "Events",
+    "pageBurgerMenuSectionSystem": "System",
+    "pageBurgerMenuLabelLegal": "Legal",
     "pageBurgerMenuLabelSettings": "Settings",
 
     "sharedDialogsHeadingsSuccess": "Success!",
