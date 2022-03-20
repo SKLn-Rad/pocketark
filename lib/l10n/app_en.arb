@@ -14,6 +14,8 @@
         }
     },
 
+    "pageEventsComponentsEventsCaptionPoweredBy": "Powered by Lost Ark Timer",
+
     "pageSettingsComponentSettingsFilterHeading": "Filter settings",
     "pageSettingsComponentSettingsFilterSubheading": "Update event filters, and reminders.",
     "pageSettingsComponentSettingsFilterTooltipsTimezone": "Timezone:",
@@ -26,7 +28,17 @@
 
     "pageSettingsComponentSettingsCreatorBody": "Made by inqVine.",
 
+    "pageBurgerMenuSectionGame": "Game",
+    "pageBurgerMenuLabelResets": "Dailies / Weeklies",
     "pageBurgerMenuLabelEvents": "Events",
+
+    "pageBurgerMenuSectionCommunity": "Community",
+    "pageBurgerMenuLabelReportIssue": "Report issue",
+    "pageBurgerMenuLabelJoinDiscord": "Join Discord",
+
+    "pageBurgerMenuSectionSystem": "System",
+    "pageBurgerMenuLabelLegal": "Legal",
+    "pageBurgerMenuLabelLicenses": "Licenses",
     "pageBurgerMenuLabelSettings": "Settings",
 
     "sharedDialogsHeadingsSuccess": "Success!",

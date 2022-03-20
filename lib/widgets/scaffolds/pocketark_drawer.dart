@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/constants/application_constants.dart';
+import 'package:pocketark/services/system_service.dart';
 
 import '../../constants/design_constants.dart';
 import '../../constants/route_constants.dart';
@@ -29,25 +31,54 @@ class PocketArkDrawer extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  kSpacingMedium.asHeightWidget,
+                  ListTile(
+                    title: Text(context.localizations?.pageBurgerMenuSectionGame ?? ''),
+                  ),
                   ListTile(
                     dense: true,
-                    leading: const CircleAvatar(
-                      backgroundColor: kPrimaryColor,
-                      foregroundColor: Colors.white,
-                      child: Icon(Ionicons.calendar_outline),
-                    ),
+                    leading: const Icon(Ionicons.calendar_outline),
                     title: Text(context.localizations?.pageBurgerMenuLabelEvents ?? ''),
                     onTap: () => kRouter.go(kRoutePathEvents),
                   ),
-                  kSpacingMedium.asHeightWidget,
                   ListTile(
                     dense: true,
-                    leading: const CircleAvatar(
-                      backgroundColor: kTertiaryColor,
-                      foregroundColor: Colors.white,
-                      child: Icon(Ionicons.settings_outline),
-                    ),
+                    leading: const Icon(Ionicons.timer_outline),
+                    title: Text(context.localizations?.pageBurgerMenuLabelResets ?? ''),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    title: Text(context.localizations?.pageBurgerMenuSectionCommunity ?? ''),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.bug_outline),
+                    title: Text(context.localizations?.pageBurgerMenuLabelReportIssue ?? ''),
+                    onTap: () => inqvine.getFromLocator<SystemService>().openUrl(kUrlGithubIssues),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.logo_discord),
+                    title: Text(context.localizations?.pageBurgerMenuLabelJoinDiscord ?? ''),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    title: Text(context.localizations?.pageBurgerMenuSectionSystem ?? ''),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.document_outline),
+                    title: Text(context.localizations?.pageBurgerMenuLabelLegal ?? ''),
+                    onTap: () => kRouter.go(kRoutePathTerms),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.code_outline),
+                    title: Text(context.localizations?.pageBurgerMenuLabelLicenses ?? ''),
+                    onTap: () => showLicensePage(context: context, applicationName: kApplicationName),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.settings_outline),
                     title: Text(context.localizations?.pageBurgerMenuLabelSettings ?? ''),
                     onTap: () => kRouter.go(kRoutePathSettings),
                   ),

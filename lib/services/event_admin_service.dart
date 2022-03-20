@@ -116,6 +116,15 @@ class EventAdminService extends InqvineServiceBase {
       schedule.timeEnd = Int64(endTime!.millisecondsSinceEpoch);
     }
 
+    //* Temporary hack to increment times by ten minutes (Check when new data)
+    final bool shouldBumpTenMinutes = (7000 <= eventId && eventId < 8000 && ![7013, 7035].contains(eventId)) || [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 5002, 5003, 5004, 6007, 6008, 6009, 6010, 6011].contains(eventId);
+    if (shouldBumpTenMinutes) {
+      schedule.timeStart = schedule.timeStart + (1000 * 60 * 10);
+      if (isRange) {
+        schedule.timeEnd = schedule.timeEnd + (1000 * 60 * 10);
+      }
+    }
+
     event.schedule.add(schedule);
     knownAdminEvents[eventId] = event;
   }
