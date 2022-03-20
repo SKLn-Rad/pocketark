@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:pocketark/events/events_updated_event.dart';
@@ -18,6 +19,13 @@ class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
 
   int _currentHomeIndex = 1;
   int get currentHomeIndex => _currentHomeIndex;
+
+  DateTime _shownDateTime = DateTime.now().toUtc();
+  DateTime get shownDateTime => _shownDateTime;
+  set shownDateTime(DateTime time) {
+    _shownDateTime = time;
+    notifyListeners();
+  }
 
   List<LostArkEvent> get allEvents => eventService.events.values.toList();
 
@@ -45,6 +53,29 @@ class HomeViewModel extends BaseViewModel with PocketArkServiceMixin {
     await streamSubscriptionTimezone?.cancel();
     streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen((_) => notifyListeners());
     streamSubscriptionTimezone = inqvine.getEventStream<TimezoneUpdatedEvent>().listen((_) => notifyListeners());
+  }
+
+  Future<void> onSetDateRequested(BuildContext context) async {
+    final DateTime currentDateTime = DateTime.now().toUtc();
+    final DateTime? newDate = await showDatePicker(
+      context: context,
+      initialDate: shownDateTime,
+      firstDate: currentDateTime.subtract(const Duration(days: 7)),
+      lastDate: currentDateTime.add(const Duration(days: 7)),
+      builder: (_, Widget? child) {
+        return Theme(
+          data: Theme.of(context),
+          child: child ?? Container(),
+        );
+      },
+    );
+
+    if (newDate == null) {
+      return;
+    }
+
+    'Selected a new date: $newDate'.logInfo();
+    shownDateTime = newDate;
   }
 
   Future<void> onResetCacheRequested(BuildContext context) async {

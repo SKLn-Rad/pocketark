@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
+import '../../../extensions/context_extensions.dart';
 import '../../../constants/design_constants.dart';
 import '../../../proto/events.pb.dart';
 import '../../../views/home/state/home_view_model.dart';
@@ -25,6 +26,14 @@ class HomeComponentPagerEvents extends StatelessWidget {
     return ListView(
       padding: kSpacingLarge.asPaddingAll,
       children: <Widget>[
+        Text(
+          context.localizations?.pageHomeComponentsEventsCaptionShownDate(viewModel.shownDateTime.ddMMyyyy) ?? '',
+          textAlign: TextAlign.center,
+          style: context.textTheme.caption!.copyWith(
+            color: kGrayLight,
+          ),
+        ),
+        kSpacingMedium.asHeightWidget,
         ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,

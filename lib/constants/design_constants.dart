@@ -28,11 +28,11 @@ final ThemeData kThemeData = ThemeData(
 );
 
 final TextTheme kTextTheme = TextTheme(
-  headline1: GoogleFonts.carterOne(fontSize: 113, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
-  headline2: GoogleFonts.carterOne(fontSize: 71, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
-  headline3: GoogleFonts.carterOne(fontSize: 57, fontWeight: FontWeight.w400, color: Colors.white),
-  headline4: GoogleFonts.carterOne(fontSize: 40, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
-  headline5: GoogleFonts.carterOne(fontSize: 28, fontWeight: FontWeight.w400, color: Colors.white),
+  headline1: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w300, letterSpacing: -1.5, color: Colors.white),
+  headline2: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w300, letterSpacing: -0.5, color: Colors.white),
+  headline3: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
+  headline4: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
+  headline5: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
   headline6: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
   subtitle1: GoogleFonts.manrope(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
   subtitle2: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),

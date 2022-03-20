@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:pocketark/views/home/state/home_view_model.dart';
-import '../../../constants/application_constants.dart';
+
+import '../../../views/home/state/home_view_model.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../resources/resources.dart';
 import '../../../constants/design_constants.dart';
@@ -26,6 +26,14 @@ class HomeView extends HookConsumerWidget {
           PocketArkImages.logoLetter,
           height: kAppBarIconHeight,
         ),
+        actions: <Widget>[
+          if (viewModel.currentHomeIndex == 1) ...<Widget>[
+            IconButton(
+              onPressed: () => viewModel.onSetDateRequested(context),
+              icon: const Icon(Ionicons.time_outline),
+            ),
+          ],
+        ],
       ),
       body: PageView(
         controller: viewModel.currentPageController,

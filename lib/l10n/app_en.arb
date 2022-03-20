@@ -10,6 +10,13 @@
     "pageHomeComponentHomeHeadingComingSoon": "Coming soon!",
     "pageHomeComponentHomeCaptionVisitUs": "Check out our GitHub for more details.",
 
+    "pageHomeComponentsEventsCaptionShownDate": "Showing results from {date}",
+    "@pageHomeComponentsEventsCaptionShownDate" : {
+        "placeholders": {
+            "date": {}
+        }
+    },
+
     "pageHomeComponentSettingsFilterHeading": "Filter settings",
     "pageHomeComponentSettingsFilterSubheading": "Update event filters, and reminders.",
     "pageHomeComponentSettingsFilterTooltipsTimezone": "Timezone:",
