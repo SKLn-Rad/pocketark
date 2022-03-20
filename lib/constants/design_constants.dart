@@ -13,6 +13,9 @@ final ThemeData kThemeData = ThemeData(
   ),
   scaffoldBackgroundColor: kGrayDarker,
   canvasColor: kGrayDarkest,
+  dividerTheme: const DividerThemeData(
+    color: Colors.white,
+  ),
   iconTheme: const IconThemeData(
     color: Colors.white,
   ),
@@ -56,6 +59,7 @@ const Color kGrayDarker = Color.fromARGB(255, 32, 33, 36);
 const Color kGrayDarkest = Color.fromARGB(255, 18, 18, 19);
 
 // Spacings
+const double kSpacingPixel = 1.0;
 const double kSpacingTiny = 5.0;
 const double kSpacingSmall = 10.0;
 const double kSpacingMedium = 15.0;

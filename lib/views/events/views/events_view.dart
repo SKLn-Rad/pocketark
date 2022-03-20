@@ -87,6 +87,7 @@ class EventsView extends HookConsumerWidget {
               );
             },
           ),
+          context.devicePadding.bottom.asHeightWidget,
         ],
       ),
     );
