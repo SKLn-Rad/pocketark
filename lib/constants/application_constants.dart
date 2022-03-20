@@ -3,6 +3,7 @@ const String kApplicationName = 'PocketArk';
 
 // URLS
 const String kUrlGithub = 'https://github.com/SKLn-Rad/pocketark';
+const String kUrlGithubIssues = 'https://github.com/SKLn-Rad/pocketark/issues';
 const String kUrlLostArkTimer = 'https://www.lostarktimer.app/alarms';
 const String kUrlInqvine = 'https://www.inqvine.com';
 

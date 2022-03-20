@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/constants/application_constants.dart';
+import 'package:pocketark/services/system_service.dart';
 
 import '../../constants/design_constants.dart';
 import '../../constants/route_constants.dart';
@@ -42,6 +44,21 @@ class PocketArkDrawer extends StatelessWidget {
                     dense: true,
                     leading: const Icon(Ionicons.timer_outline),
                     title: Text(context.localizations?.pageBurgerMenuLabelResets ?? ''),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    title: Text(context.localizations?.pageBurgerMenuSectionCommunity ?? ''),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.bug_outline),
+                    title: Text(context.localizations?.pageBurgerMenuLabelReportIssue ?? ''),
+                    onTap: () => inqvine.getFromLocator<SystemService>().openUrl(kUrlGithubIssues),
+                  ),
+                  ListTile(
+                    dense: true,
+                    leading: const Icon(Ionicons.logo_discord),
+                    title: Text(context.localizations?.pageBurgerMenuLabelJoinDiscord ?? ''),
                     onTap: () {},
                   ),
                   ListTile(
