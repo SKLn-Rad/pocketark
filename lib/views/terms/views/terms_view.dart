@@ -21,6 +21,7 @@ class TermsView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TermsViewModel viewModel = useViewModel(ref, () => TermsViewModel());
     return PocketArkScaffold(
+      includeDrawer: false,
       appBar: AppBar(
         title: const Text(kApplicationName),
       ),
@@ -49,6 +50,7 @@ class TermsView extends HookConsumerWidget {
             onPressed: viewModel.onTermsAccepted,
           ),
           kSpacingSmall.asHeightWidget,
+          context.devicePadding.bottom.asHeightWidget,
         ],
       ),
     );

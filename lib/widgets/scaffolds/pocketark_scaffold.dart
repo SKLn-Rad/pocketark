@@ -13,6 +13,7 @@ class PocketArkScaffold extends StatelessWidget {
     this.appBar,
     this.systemUiOverlayStyle,
     this.bottomNavigationBar,
+    this.includeDrawer = true,
     Key? key,
   }) : super(key: key);
 
@@ -21,6 +22,7 @@ class PocketArkScaffold extends StatelessWidget {
   final BottomNavigationBar? bottomNavigationBar;
   final PreferredSizeWidget? appBar;
   final Widget body;
+  final bool includeDrawer;
 
   void handleKeyboardDismiss(BuildContext context) {
     final FocusScopeNode currentFocus = FocusScope.of(context);
@@ -50,7 +52,7 @@ class PocketArkScaffold extends StatelessWidget {
           appBar: appBar,
           body: body,
           bottomNavigationBar: bottomNavigationBar,
-          drawer: const PocketArkDrawer(),
+          drawer: includeDrawer ? const PocketArkDrawer() : null,
         ),
       ),
     );
