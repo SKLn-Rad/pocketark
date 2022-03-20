@@ -21,14 +21,20 @@ class EventsView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final EventsViewModel viewModel = useViewModel(ref, () => EventsViewModel());
-    final String searchText = viewModel.searchController.text;
 
     return PocketArkScaffold(
       appBar: PocketArkAppBar(
         actions: <Widget>[
-          IconButton(
-            onPressed: () => viewModel.onSetDateRequested(context),
-            icon: const Icon(Ionicons.time_outline),
+          PopupMenuButton<EventDropdownAction>(
+            itemBuilder: (_) {
+              return <PopupMenuEntry<EventDropdownAction>>[
+                PopupMenuItem<EventDropdownAction>(
+                  value: EventDropdownAction.selectDate,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.selectDate),
+                  child: Text(EventDropdownAction.selectDate.toLocale(context)),
+                ),
+              ];
+            },
           ),
         ],
       ),
@@ -60,8 +66,8 @@ class EventsView extends HookConsumerWidget {
             TextFormField(
               controller: viewModel.searchController,
               onChanged: (String val) => viewModel.searchText = val,
-              decoration: const InputDecoration(
-                hintText: 'Search for an event...',
+              decoration: InputDecoration(
+                hintText: context.localizations?.pageEventsComponentsEventsTooltipsSearch ?? '',
               ),
             ),
             kSpacingMedium.asHeightWidget,

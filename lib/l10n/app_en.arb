@@ -7,6 +7,9 @@
 
     "pageLegalButtonContinue": "Let's go!",
 
+    "pageEventsComponentsAppBarActionsSelectDate": "Select Date",
+    "pageEventsComponentsAppBarActionsMuteAll": "Mute All",
+    "pageEventsComponentsAppBarActionsUnmuteAll": "Unmute All",
     "pageEventsComponentsEventsCaptionShownDate": "Showing results from {date}",
     "@pageEventsComponentsEventsCaptionShownDate" : {
         "placeholders": {
@@ -15,6 +18,7 @@
     },
 
     "pageEventsComponentsEventsCaptionPoweredBy": "Powered by Lost Ark Timer",
+    "pageEventsComponentsEventsTooltipsSearch": "Search for an event...",
 
     "pageSettingsComponentSettingsFilterHeading": "Filter settings",
     "pageSettingsComponentSettingsFilterSubheading": "Update event filters, and reminders.",

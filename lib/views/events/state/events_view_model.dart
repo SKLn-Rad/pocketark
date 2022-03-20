@@ -1,11 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
 import '../../../events/events_updated_event.dart';
+import '../../../extensions/context_extensions.dart';
 import '../../../services/service_configuration.dart';
 import '../../../proto/events.pb.dart';
+
+enum EventDropdownAction {
+  selectDate,
+}
+
+extension EventDropdownActionExtensions on EventDropdownAction {
+  String toLocale(BuildContext context) {
+    final AppLocalizations? localizations = context.localizations;
+    switch (this) {
+      case EventDropdownAction.selectDate:
+        return localizations!.pageEventsComponentsAppBarActionsSelectDate;
+    }
+  }
+}
 
 class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   final TextEditingController searchController = TextEditingController();
@@ -31,6 +47,20 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     await streamSubscriptionEvents?.cancel();
     streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen(filterEvents);
     filterEvents(EventsUpdatedEvent());
+  }
+
+  Future<void> onDropdownActionSelected(BuildContext context, EventDropdownAction? action) async {
+    if (action == null) {
+      return;
+    }
+
+    'Handling action: $action'.logDebug();
+    switch (action) {
+      case EventDropdownAction.selectDate:
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        await onSetDateRequested(context);
+        break;
+    }
   }
 
   Future<void> onSetDateRequested(BuildContext context) async {
