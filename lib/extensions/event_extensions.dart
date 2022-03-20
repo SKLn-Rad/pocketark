@@ -48,8 +48,8 @@ extension EventExtensions on LostArkEvent {
   }
 
   String get getNextEventTimeAsString {
-    LostArkEvent_LostArkEventSchedule nextEventSchedule = getNextEventTime;
-    Duration nextEventTime = nextEventSchedule.timeUntilEvent;
+    final LostArkEvent_LostArkEventSchedule nextEventSchedule = getNextEventTime;
+    final Duration nextEventTime = nextEventSchedule.timeUntilEvent;
     return nextEventTime.inSeconds.getTimeAsStringFromMinute;
   }
 }
@@ -87,7 +87,7 @@ extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
 
   Duration get timeUntilEvent {
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStart.toInt());
-    final DateTime dateTimeNow = DateTime.now().toUtc();
+    final DateTime dateTimeNow = DateTime.now();
     return dateTime.difference(dateTimeNow);
   }
 

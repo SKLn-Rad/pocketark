@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/constants/design_constants.dart';
-import 'package:pocketark/proto/events.pb.dart';
-import 'package:pocketark/extensions/event_extensions.dart';
+import 'package:transparent_image/transparent_image.dart';
+
+import '../../../constants/design_constants.dart';
+import '../../../proto/events.pb.dart';
+import '../../../extensions/event_extensions.dart';
 
 class EventTile extends StatefulWidget {
   const EventTile({
@@ -21,8 +25,35 @@ class EventTile extends StatefulWidget {
 }
 
 class _EventTileState extends State<EventTile> {
+  static const double kImageRadius = 72.0;
+
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    setupTimer();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void setupTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String title = '[${widget.event.recItemLevel}] ${widget.event.fallbackName}';
+    final String nextEventCaption = 'Next ${widget.event.getEventTypeAsString(context)} in:';
+
     return Card(
       child: Container(
         width: double.infinity,
@@ -34,10 +65,13 @@ class _EventTileState extends State<EventTile> {
             Align(
               alignment: Alignment.center,
               child: Container(
-                height: 72.0,
-                width: 72.0,
+                height: kImageRadius,
+                width: kImageRadius,
                 color: kGrayLighter,
-                child: Image.network("https://lostarkcodex.com/icons/" + widget.event.iconPath),
+                child: FadeInImage(
+                  image: NetworkImage("https://lostarkcodex.com/icons/" + widget.event.iconPath),
+                  placeholder: MemoryImage(kTransparentImage),
+                ),
               ),
             ),
             kSpacingSmall.asWidthWidget,
@@ -46,7 +80,7 @@ class _EventTileState extends State<EventTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "[${widget.event.recItemLevel}] ${widget.event.fallbackName}",
+                    title,
                     style: context.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
                   ),
                   kSpacingTiny.asHeightWidget,
@@ -54,9 +88,10 @@ class _EventTileState extends State<EventTile> {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: "Next ${widget.event.getEventTypeAsString(context)} in: ",
+                          text: nextEventCaption,
                           style: context.textTheme.caption!.copyWith(color: Colors.green),
                         ),
+                        const TextSpan(text: ' '),
                         TextSpan(
                           text: widget.event.getNextEventTimeAsString,
                           style: context.textTheme.caption!.copyWith(color: Colors.yellow),
