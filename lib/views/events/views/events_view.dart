@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:pocketark/constants/application_constants.dart';
-import 'package:pocketark/views/events/components/event_list.dart';
 
+import '../../../constants/application_constants.dart';
+import '../../../widgets/indicators/pocketark_loading_indicator.dart';
 import '../../../constants/design_constants.dart';
 import '../../../extensions/context_extensions.dart';
+import '../../../proto/events.pb.dart';
 import '../../../views/events/state/events_view_model.dart';
 import '../../../widgets/scaffolds/pocketark_appbar.dart';
 import '../../../widgets/scaffolds/pocketark_scaffold.dart';
+import '../../../widgets/tiles/event_tile.dart';
 
 class EventsView extends HookConsumerWidget {
   const EventsView({Key? key}) : super(key: key);
@@ -30,7 +32,7 @@ class EventsView extends HookConsumerWidget {
         padding: kSpacingLarge.asPaddingAll,
         children: <Widget>[
           Text(
-            context.localizations?.pageEventsComponentsEventsCaptionShownDate(viewModel.shownDateTime.ddMMyyyy) ?? '',
+            context.localizations?.pageEventsComponentsEventsCaptionShownDate(viewModel.selectedDate.ddMMyyyy) ?? '',
             textAlign: TextAlign.center,
             style: context.textTheme.caption!.copyWith(
               color: kGrayLight,
@@ -47,7 +49,21 @@ class EventsView extends HookConsumerWidget {
             ),
           ),
           kSpacingMedium.asHeightWidget,
-          EventList(viewModel: viewModel),
+          if (viewModel.filteredEvents.isEmpty) ...<Widget>[
+            const PocketArkLoadingIndicator(),
+          ],
+          if (viewModel.filteredEvents.isNotEmpty) ...<Widget>[
+            ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: viewModel.filteredEvents.length,
+              separatorBuilder: (_, __) => kSpacingMedium.asHeightWidget,
+              itemBuilder: (_, int index) {
+                final LostArkEvent event = viewModel.filteredEvents[index];
+                return EventTile(event: event);
+              },
+            ),
+          ],
           context.devicePadding.bottom.asHeightWidget,
         ],
       ),

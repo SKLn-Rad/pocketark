@@ -4,22 +4,59 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
 import '../../../events/events_updated_event.dart';
-import '../../../events/timezone_updated_event.dart';
 import '../../../services/service_configuration.dart';
 import '../../../proto/events.pb.dart';
 
 class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   StreamSubscription<EventsUpdatedEvent>? streamSubscriptionEvents;
-  StreamSubscription<TimezoneUpdatedEvent>? streamSubscriptionTimezone;
 
-  List<LostArkEvent> get allEvents => eventService.events.values.toList();
-  List<LostArkEvent> get filteredEvents {
+  final List<LostArkEvent> filteredEvents = <LostArkEvent>[];
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  @override
+  void onFirstRender() {
+    super.onFirstRender();
+    bootstrap();
+  }
+
+  Future<void> bootstrap() async {
+    await streamSubscriptionEvents?.cancel();
+    streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen(filterEvents);
+    filterEvents(EventsUpdatedEvent());
+  }
+
+  Future<void> onSetDateRequested(BuildContext context) async {
+    final DateTime currentDateTime = DateTime.now().toUtc();
+    DateTime? newDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: currentDateTime.subtract(const Duration(days: 7)),
+      lastDate: currentDateTime.add(const Duration(days: 7)),
+      builder: (_, Widget? child) {
+        return Theme(
+          data: Theme.of(context),
+          child: child ?? Container(),
+        );
+      },
+    );
+
+    if (newDate == null) {
+      return;
+    }
+
+    'Selected a new date: $newDate'.logInfo();
+    selectedDate = newDate;
+    inqvine.publishEvent(EventsUpdatedEvent());
+  }
+
+  Future<void> filterEvents(EventsUpdatedEvent event) async {
     final Duration currentHour = Duration(hours: DateTime.now().hour);
     final Duration currentMinute = Duration(minutes: DateTime.now().minute);
-    final DateTime compareDateTime = shownDateTime.add(currentHour).add(currentMinute);
+    final DateTime compareDateTime = selectedDate.add(currentHour).add(currentMinute);
+    filteredEvents.clear();
+    notifyListeners();
 
-    final List<LostArkEvent> newEvents = <LostArkEvent>[];
-    for (final LostArkEvent oldEvent in allEvents) {
+    for (final LostArkEvent oldEvent in eventService.events.values) {
       final LostArkEvent newEvent = LostArkEvent.create()
         ..mergeFromMessage(oldEvent)
         ..schedule.clear();
@@ -49,13 +86,13 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
         final Duration difference = eventStartTime.difference(timeNow);
         //? Check that there is at least one event in the near future
         if (difference >= Duration.zero) {
-          newEvents.add(newEvent);
+          filteredEvents.add(newEvent);
         }
       }
     }
 
     //* Sort by item level
-    newEvents.sort(
+    filteredEvents.sort(
       (a, b) {
         final int aValue = a.type * 10000 + a.recItemLevel;
         final int bValue = b.type * 10000 + b.recItemLevel;
@@ -63,49 +100,7 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
       },
     );
 
-    return newEvents;
-  }
-
-  DateTime _shownDateTime = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toUtc();
-  DateTime get shownDateTime => _shownDateTime;
-  set shownDateTime(DateTime time) {
-    _shownDateTime = time;
+    'Filtered events successfully'.logInfo();
     notifyListeners();
-  }
-
-  @override
-  void onFirstRender() {
-    super.onFirstRender();
-    bootstrap();
-  }
-
-  Future<void> bootstrap() async {
-    await streamSubscriptionEvents?.cancel();
-    await streamSubscriptionTimezone?.cancel();
-    streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen((_) => notifyListeners());
-    streamSubscriptionTimezone = inqvine.getEventStream<TimezoneUpdatedEvent>().listen((_) => notifyListeners());
-  }
-
-  Future<void> onSetDateRequested(BuildContext context) async {
-    final DateTime currentDateTime = DateTime.now().toUtc();
-    DateTime? newDate = await showDatePicker(
-      context: context,
-      initialDate: shownDateTime,
-      firstDate: currentDateTime.subtract(const Duration(days: 7)),
-      lastDate: currentDateTime.add(const Duration(days: 7)),
-      builder: (_, Widget? child) {
-        return Theme(
-          data: Theme.of(context),
-          child: child ?? Container(),
-        );
-      },
-    );
-
-    if (newDate == null) {
-      return;
-    }
-
-    'Selected a new date: $newDate'.logInfo();
-    shownDateTime = newDate;
   }
 }
