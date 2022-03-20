@@ -51,12 +51,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions iosDevelopment = FirebaseOptions(
     apiKey: 'AIzaSyCwDgvloiYJbLU33KA6kzsfn3_5FtB2TC4',
-    appId: '1:26568019563:ios:122ded1ab3948ffcd5eb2e',
+    appId: '1:26568019563:ios:f9dcda527f1d9f5bd5eb2e',
     messagingSenderId: '26568019563',
     projectId: 'pocketark-development',
     storageBucket: 'pocketark-development.appspot.com',
-    iosClientId: '26568019563-kv8ohkr0hmpvltof2p6k2o2pa3jidb3d.apps.googleusercontent.com',
-    iosBundleId: 'com.inqvine.pocketark',
+    iosClientId: '26568019563-l36mqtkka7vjm2nks4qkmistchaks9r4.apps.googleusercontent.com',
+    iosBundleId: 'com.inqvine.personal.pocketark',
   );
 
   static const FirebaseOptions androidProduction = FirebaseOptions(
