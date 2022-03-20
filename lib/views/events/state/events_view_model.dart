@@ -51,8 +51,8 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     }
     newEvents.sort(
       (a, b) {
-        int aValue = a.type * 1000 + a.recItemLevel;
-        int bValue = b.type * 1000 + b.recItemLevel;
+        int aValue = a.type * 10000 + a.recItemLevel;
+        int bValue = b.type * 10000 + b.recItemLevel;
         return aValue.compareTo(bValue);
       },
     );
