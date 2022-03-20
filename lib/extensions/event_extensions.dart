@@ -11,25 +11,25 @@ extension EventExtensions on LostArkEvent {
 
   String getEventTypeAsString(BuildContext context) {
     switch (type) {
-      case 1:
+      case 0:
         return context.localizations!.eventTypePvP;
-      case 2:
+      case 1:
         return context.localizations!.eventTypeCapture;
-      case 3:
+      case 2:
         return context.localizations!.eventTypeChaosGate;
-      case 4:
+      case 3:
         return context.localizations!.eventTypeFieldBoss;
-      case 5:
+      case 4:
         return context.localizations!.eventTypeAdventureIsland;
-      case 6:
+      case 5:
         return context.localizations!.eventTypeGhostShip;
-      case 7:
+      case 6:
         return context.localizations!.eventTypeIsland;
-      case 8:
+      case 7:
         return context.localizations!.eventTypeSailing;
-      case 9:
+      case 8:
         return context.localizations!.eventTypeSiege;
-      case 10:
+      case 9:
         return context.localizations!.eventTypeProvingGrounds;
       default:
         return context.localizations!.eventTypeUnknown;
