@@ -37,11 +37,11 @@ class SplashViewModel extends BaseViewModel with PocketArkServiceMixin {
           // Check terms of use
           final bool? result = sharedPreferences.getBool(kSharedKeyTermsAccepted);
           if (result == null || !result) {
-            kRouter.go('/terms');
+            kRouter.go(kRoutePathTerms);
             return;
           }
 
-          kRouter.go('/home');
+          kRouter.go(kRoutePathEvents);
         },
         onError: handleError,
       );

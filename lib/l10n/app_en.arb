@@ -7,31 +7,27 @@
 
     "pageLegalButtonContinue": "Let's go!",
 
-    "pageHomeComponentHomeHeadingComingSoon": "Coming soon!",
-    "pageHomeComponentHomeCaptionVisitUs": "Check out our GitHub for more details.",
-
-    "pageHomeComponentsEventsCaptionShownDate": "Showing results from {date}",
-    "@pageHomeComponentsEventsCaptionShownDate" : {
+    "pageEventsComponentsEventsCaptionShownDate": "Showing results from {date}",
+    "@pageEventsComponentsEventsCaptionShownDate" : {
         "placeholders": {
             "date": {}
         }
     },
 
-    "pageHomeComponentSettingsFilterHeading": "Filter settings",
-    "pageHomeComponentSettingsFilterSubheading": "Update event filters, and reminders.",
-    "pageHomeComponentSettingsFilterTooltipsTimezone": "Timezone:",
+    "pageSettingsComponentSettingsFilterHeading": "Filter settings",
+    "pageSettingsComponentSettingsFilterSubheading": "Update event filters, and reminders.",
+    "pageSettingsComponentSettingsFilterTooltipsTimezone": "Timezone:",
 
-    "pageHomeComponentSettingsSystemHeading": "System settings",
-    "pageHomeComponentSettingsSystemSubheading": "Update system and device preferences.",
+    "pageSettingsComponentSettingsSystemHeading": "System settings",
+    "pageSettingsComponentSettingsSystemSubheading": "Update system and device preferences.",
 
-    "pageHomeComponentSettingsButtonResetCache": "Reset cache",
-    "pageHomeComponentSettingsResetCacheBody": "Your cache data has been cleared.",
+    "pageSettingsComponentSettingsButtonResetCache": "Reset cache",
+    "pageSettingsComponentSettingsResetCacheBody": "Your cache data has been cleared.",
 
-    "pageHomeComponentSettingsCreatorBody": "Made by inqVine.",
+    "pageSettingsComponentSettingsCreatorBody": "Made by inqVine.",
 
-    "pageHomeNavBarLabelHome": "Home",
-    "pageHomeNavBarLabelEvents": "Events",
-    "pageHomeNavBarLabelSettings": "Settings",
+    "pageBurgerMenuLabelEvents": "Events",
+    "pageBurgerMenuLabelSettings": "Settings",
 
     "sharedDialogsHeadingsSuccess": "Success!",
     "sharedActionsRetry": "Retry",

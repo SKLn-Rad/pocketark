@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
+import '../../settings/state/settings_view_model.dart';
 import '../../../enums/pocketark_timezone.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../constants/design_constants.dart';
-import '../state/home_view_model.dart';
 
-class HomeComponentCardFilterSettings extends StatelessWidget {
-  const HomeComponentCardFilterSettings({
+class SettingsCardFilterSettings extends StatelessWidget {
+  const SettingsCardFilterSettings({
     required this.viewModel,
     Key? key,
   }) : super(key: key);
 
-  final HomeViewModel viewModel;
+  final SettingsViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +26,14 @@ class HomeComponentCardFilterSettings extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              localizations?.pageHomeComponentSettingsFilterHeading ?? '',
+              localizations?.pageSettingsComponentSettingsFilterHeading ?? '',
               textAlign: TextAlign.start,
               style: context.textTheme.subtitle2!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              localizations?.pageHomeComponentSettingsFilterSubheading ?? '',
+              localizations?.pageSettingsComponentSettingsFilterSubheading ?? '',
               textAlign: TextAlign.start,
               style: context.textTheme.caption,
             ),
@@ -43,7 +43,7 @@ class HomeComponentCardFilterSettings extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    localizations?.pageHomeComponentSettingsFilterTooltipsTimezone ?? '',
+                    localizations?.pageSettingsComponentSettingsFilterTooltipsTimezone ?? '',
                     style: context.textTheme.bodyText2,
                   ),
                 ),

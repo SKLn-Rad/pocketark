@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
+import '../../../views/settings/state/settings_view_model.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../constants/design_constants.dart';
-import '../state/home_view_model.dart';
 
-class HomeComponentCardSystemSettings extends StatelessWidget {
-  const HomeComponentCardSystemSettings({
+class SettingsCardSystemSettings extends StatelessWidget {
+  const SettingsCardSystemSettings({
     required this.viewModel,
     Key? key,
   }) : super(key: key);
 
-  final HomeViewModel viewModel;
+  final SettingsViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +25,14 @@ class HomeComponentCardSystemSettings extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              localizations?.pageHomeComponentSettingsSystemHeading ?? '',
+              localizations?.pageSettingsComponentSettingsSystemHeading ?? '',
               textAlign: TextAlign.start,
               style: context.textTheme.subtitle2!.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              localizations?.pageHomeComponentSettingsSystemSubheading ?? '',
+              localizations?.pageSettingsComponentSettingsSystemSubheading ?? '',
               textAlign: TextAlign.start,
               style: context.textTheme.caption,
             ),
@@ -44,7 +44,7 @@ class HomeComponentCardSystemSettings extends StatelessWidget {
                 color: Colors.red,
                 onPressed: () => viewModel.onResetCacheRequested(context),
                 child: Text(
-                  localizations?.pageHomeComponentSettingsButtonResetCache ?? '',
+                  localizations?.pageSettingsComponentSettingsButtonResetCache ?? '',
                   style: context.textTheme.button!.copyWith(color: Colors.white),
                 ),
               ),
