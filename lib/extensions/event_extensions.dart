@@ -58,7 +58,9 @@ extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
   String get getEventStartTimeAsString {
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStart.toInt());
     // return dateTime.toIso8601String();
-    return "${dateTime.hour}:${dateTime.minute}";
+    String hour = "${dateTime.hour}".padLeft(2, "0");
+    String minute = "${dateTime.minute}".padLeft(2, "0");
+    return hour + ':' + minute;
   }
 
   String get getEventTimeAsString {
