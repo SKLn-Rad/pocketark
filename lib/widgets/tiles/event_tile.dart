@@ -9,6 +9,8 @@ import '../../../constants/design_constants.dart';
 import '../../../proto/events.pb.dart';
 import '../../constants/application_constants.dart';
 
+import 'package:pocketark/extensions/context_extensions.dart';
+
 class EventTile extends StatefulWidget {
   const EventTile({
     required this.event,
@@ -54,7 +56,8 @@ class _EventTileState extends State<EventTile> {
 
   @override
   Widget build(BuildContext context) {
-    final String nextEventCaption = 'Next ${widget.event.getEventTypeAsString(context)} in:';
+    final String nextEventCountdown = widget.event.getNextEventTimeAsString;
+    final String nextEventCaption = (nextEventCountdown.length >= 1) ? context.localizations!.pageEventsTileCaptionNextEventIn(widget.event.getEventTypeAsString(context)) : context.localizations!.pageEventsTileCaptionNoMoreEvents;
 
     return AnimatedOpacity(
       duration: kBasicAnimationDuration,

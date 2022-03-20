@@ -52,7 +52,11 @@ extension EventExtensions on LostArkEvent {
   String get getNextEventTimeAsString {
     final LostArkEvent_LostArkEventSchedule nextEventSchedule = getNextEventTime;
     final Duration nextEventTime = nextEventSchedule.timeUntilEvent;
-    return nextEventTime.inSeconds.getTimeAsStringFromMinute;
+    if (nextEventTime.inSeconds <= 0) {
+      return '';
+    } else {
+      return nextEventTime.inSeconds.getTimeAsStringFromMinute;
+    }
   }
 }
 
