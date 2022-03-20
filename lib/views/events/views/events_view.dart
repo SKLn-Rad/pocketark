@@ -49,7 +49,7 @@ class EventsView extends HookConsumerWidget {
             ),
           ),
           kSpacingMedium.asHeightWidget,
-          if (viewModel.filteredEvents.isEmpty) ...<Widget>[
+          if (viewModel.filteredEvents.isEmpty && viewModel.isBusy) ...<Widget>[
             const PocketArkLoadingIndicator(),
           ],
           if (viewModel.filteredEvents.isNotEmpty) ...<Widget>[
