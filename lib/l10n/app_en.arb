@@ -20,6 +20,8 @@
     "pageHomeComponentSettingsButtonResetCache": "Reset cache",
     "pageHomeComponentSettingsResetCacheBody": "Your cache data has been cleared.",
 
+    "pageHomeComponentSettingsCreatorBody": "Made by inqVine.",
+
     "pageHomeNavBarLabelHome": "Home",
     "pageHomeNavBarLabelEvents": "Events",
     "pageHomeNavBarLabelSettings": "Settings",
