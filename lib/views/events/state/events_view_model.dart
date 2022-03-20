@@ -15,7 +15,7 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   List<LostArkEvent> get allEvents => eventService.events.values.toList();
   List<LostArkEvent> get filteredEvents {
     final Duration currentHour = Duration(hours: DateTime.now().toUtc().hour);
-    final Duration currentMinute = Duration(hours: DateTime.now().toUtc().hour);
+    final Duration currentMinute = Duration(minutes: DateTime.now().toUtc().minute);
     final DateTime compareDateTime = shownDateTime.add(currentHour).add(currentMinute);
 
     final List<LostArkEvent> newEvents = <LostArkEvent>[];
@@ -26,17 +26,36 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
 
       for (final LostArkEvent_LostArkEventSchedule schedule in oldEvent.schedule) {
         final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(schedule.timeStart.toInt());
-        final Duration difference = compareDateTime.difference(eventStartTime);
-        if (difference.inHours <= 12) {
+        final Duration difference = eventStartTime.difference(compareDateTime);
+        //! This only looks at +- 12 hours, could be setting
+        if (difference.inHours.abs() <= 12) {
           newEvent.schedule.add(schedule);
         }
       }
 
       if (newEvent.schedule.isNotEmpty) {
-        newEvents.add(newEvent);
+        newEvent.schedule.sort(
+          (a, b) {
+            return a.timeStart.compareTo(b.timeStart);
+          },
+        );
+
+        final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(newEvent.schedule.last.timeStart.toInt());
+        final DateTime timeNow = DateTime.now();
+        final Duration difference = eventStartTime.difference(timeNow);
+        //? Check that there is at least one event in the near future
+        if (difference >= Duration.zero) {
+          newEvents.add(newEvent);
+        }
       }
     }
-
+    newEvents.sort(
+      (a, b) {
+        int aValue = a.type * 1000 + a.recItemLevel;
+        int bValue = b.type * 1000 + b.recItemLevel;
+        return aValue.compareTo(bValue);
+      },
+    );
     return newEvents;
   }
 

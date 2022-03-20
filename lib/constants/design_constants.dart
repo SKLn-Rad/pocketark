@@ -13,6 +13,7 @@ final ThemeData kThemeData = ThemeData(
   ),
   scaffoldBackgroundColor: kGrayDarker,
   canvasColor: kGrayDarkest,
+  cardTheme: const CardTheme(color: kGrayDark),
   dividerTheme: const DividerThemeData(
     color: Colors.white,
   ),
@@ -37,8 +38,8 @@ final TextTheme kTextTheme = TextTheme(
   headline4: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
   headline5: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
   headline6: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
-  subtitle1: GoogleFonts.manrope(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
-  subtitle2: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
+  subtitle1: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
+  subtitle2: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
   bodyText1: GoogleFonts.manrope(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.5, color: Colors.white),
   bodyText2: GoogleFonts.manrope(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
   button: GoogleFonts.manrope(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 1.25, color: Colors.white),

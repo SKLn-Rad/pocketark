@@ -52,5 +52,17 @@
     "sharedTimezonesSA": "South America (UTC-4)",
     "sharedTimezonesServerTime": "Server time",
 
-    "errorsNotConnected": "Failed to connect to server."
+    "errorsNotConnected": "Failed to connect to server.",
+
+    "eventTypePvP":"PvP Event",
+    "eventTypeCapture":"Capture",
+    "eventTypeChaosGate":"Chaos Gate",
+    "eventTypeFieldBoss":"Field Boss",
+    "eventTypeAdventureIsland":"Adventure Island",
+    "eventTypeGhostShip":"Ghost Ship",
+    "eventTypeIsland":"Island",
+    "eventTypeSailing":"Sailing",
+    "eventTypeSiege":"Siege",
+    "eventTypeProvingGrounds":"Proving Grounds",
+    "eventTypeUnknown":"Unknown Event"
 }
