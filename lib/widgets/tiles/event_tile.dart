@@ -37,6 +37,7 @@ class _EventTileState extends State<EventTile> {
                 height: 72.0,
                 width: 72.0,
                 color: kGrayLighter,
+                child: Image.network("https://lostarkcodex.com/icons/" + widget.event.iconPath),
               ),
             ),
             kSpacingSmall.asWidthWidget,
