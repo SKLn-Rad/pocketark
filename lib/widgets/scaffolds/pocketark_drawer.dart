@@ -72,6 +72,12 @@ class PocketArkDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     dense: true,
+                    leading: const Icon(Ionicons.code_outline),
+                    title: Text(context.localizations?.pageBurgerMenuLabelLicenses ?? ''),
+                    onTap: () => showLicensePage(context: context, applicationName: kApplicationName),
+                  ),
+                  ListTile(
+                    dense: true,
                     leading: const Icon(Ionicons.settings_outline),
                     title: Text(context.localizations?.pageBurgerMenuLabelSettings ?? ''),
                     onTap: () => kRouter.go(kRoutePathSettings),
