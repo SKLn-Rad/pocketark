@@ -24,8 +24,8 @@ class SettingsView extends HookConsumerWidget {
       body: ListView(
         padding: kSpacingLarge.asPaddingAll,
         children: <Widget>[
-          SettingsCardFilterSettings(viewModel: viewModel),
-          kSpacingMedium.asHeightWidget,
+          // SettingsCardFilterSettings(viewModel: viewModel),
+          // kSpacingMedium.asHeightWidget,
           SettingsCardSystemSettings(viewModel: viewModel),
           kSpacingExtraLarge.asHeightWidget,
           InqvineTapHandler(

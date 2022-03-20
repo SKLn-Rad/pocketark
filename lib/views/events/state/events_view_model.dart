@@ -14,8 +14,8 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
 
   List<LostArkEvent> get allEvents => eventService.events.values.toList();
   List<LostArkEvent> get filteredEvents {
-    final Duration currentHour = Duration(hours: DateTime.now().toUtc().hour);
-    final Duration currentMinute = Duration(minutes: DateTime.now().toUtc().minute);
+    final Duration currentHour = Duration(hours: DateTime.now().hour);
+    final Duration currentMinute = Duration(minutes: DateTime.now().minute);
     final DateTime compareDateTime = shownDateTime.add(currentHour).add(currentMinute);
 
     final List<LostArkEvent> newEvents = <LostArkEvent>[];
@@ -25,10 +25,14 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
         ..schedule.clear();
 
       for (final LostArkEvent_LostArkEventSchedule schedule in oldEvent.schedule) {
-        final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(schedule.timeStart.toInt());
-        final Duration difference = eventStartTime.difference(compareDateTime);
-        //! This only looks at +- 12 hours, could be setting
-        if (difference.inHours.abs() <= 12) {
+        final int eventStartUtc = schedule.timeStart.toInt();
+        final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(eventStartUtc);
+
+        //* We can adjust offsets here for server time
+        // compareDateTime.offset = +1
+        // eventStartTime.offset = +1
+
+        if (compareDateTime.ddMMyyyy == eventStartTime.ddMMyyyy) {
           newEvent.schedule.add(schedule);
         }
       }
@@ -49,13 +53,16 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
         }
       }
     }
+
+    //* Sort by item level
     newEvents.sort(
       (a, b) {
-        int aValue = a.type * 10000 + a.recItemLevel;
-        int bValue = b.type * 10000 + b.recItemLevel;
+        final int aValue = a.type * 10000 + a.recItemLevel;
+        final int bValue = b.type * 10000 + b.recItemLevel;
         return aValue.compareTo(bValue);
       },
     );
+
     return newEvents;
   }
 

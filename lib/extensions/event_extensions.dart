@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'context_extensions.dart';
 import 'package:pocketark/extensions/number_extensions.dart';
 import 'package:pocketark/proto/events.pb.dart';
@@ -37,13 +36,14 @@ extension EventExtensions on LostArkEvent {
 
   LostArkEvent_LostArkEventSchedule get getNextEventTime {
     LostArkEvent_LostArkEventSchedule returnSchedule = LostArkEvent_LostArkEventSchedule();
-    Duration timeUntilReturnEvent = Duration(days: 5);
+    Duration timeUntilReturnEvent = const Duration(days: 5);
     for (LostArkEvent_LostArkEventSchedule schedule in this.schedule) {
       if (schedule.timeUntilEvent < timeUntilReturnEvent && schedule.timeUntilEvent >= Duration.zero) {
         returnSchedule = schedule;
         timeUntilReturnEvent = returnSchedule.timeUntilEvent;
       }
     }
+
     return returnSchedule;
   }
 
@@ -57,17 +57,14 @@ extension EventExtensions on LostArkEvent {
 extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
   String get getEventStartTimeAsString {
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStart.toInt());
-    // return dateTime.toIso8601String();
-    final String hour = "${dateTime.hour}".padLeft(2, "0");
-    final String minute = "${dateTime.minute}".padLeft(2, "0");
-    return hour + ':' + minute;
+    return "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
   }
 
   String get getEventTimeAsString {
     if (timeEnd != -1) {
       final DateTime dateTimeStart = DateTime.fromMillisecondsSinceEpoch(timeStart.toInt());
       final DateTime dateTimeEnd = DateTime.fromMillisecondsSinceEpoch(timeEnd.toInt());
-      return "${dateTimeStart.hour}:${dateTimeStart.minute} - ${dateTimeEnd.hour}:${dateTimeEnd.minute}";
+      return "${dateTimeStart.hour.toString().padLeft(2, '0')}:${dateTimeStart.minute.toString().padLeft(2, '0')} - ${dateTimeEnd.hour.toString().padLeft(2, '0')}:${dateTimeEnd.minute.toString().padLeft(2, '0')}";
     } else {
       return getEventStartTimeAsString;
     }
@@ -77,7 +74,7 @@ extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
     final Duration timeUntilEventLocal = timeUntilEvent;
 
     //! Change duration minutes to a configurable setting
-    if (timeUntilEventLocal >= Duration(minutes: -1) && timeUntilEventLocal <= Duration(minutes: 30)) {
+    if (timeUntilEventLocal >= const Duration(minutes: -1) && timeUntilEventLocal <= const Duration(minutes: 30)) {
       return EventScheduleTense.present;
     } else {
       if (timeUntilEventLocal > Duration.zero) {
@@ -102,7 +99,6 @@ extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
         return Colors.greenAccent;
       default:
         return Colors.orange;
-        return Colors.green;
     }
   }
 }
