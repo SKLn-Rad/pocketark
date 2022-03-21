@@ -55,12 +55,12 @@ class PocketArkDrawer extends StatelessWidget {
                     title: Text(context.localizations?.pageBurgerMenuLabelReportIssue ?? ''),
                     onTap: () => inqvine.getFromLocator<SystemService>().openUrl(kUrlGithubIssues),
                   ),
-                  ListTile(
-                    dense: true,
-                    leading: const Icon(Ionicons.logo_discord),
-                    title: Text(context.localizations?.pageBurgerMenuLabelJoinDiscord ?? ''),
-                    onTap: () {},
-                  ),
+                  // ListTile(
+                  //   dense: true,
+                  //   leading: const Icon(Ionicons.logo_discord),
+                  //   title: Text(context.localizations?.pageBurgerMenuLabelJoinDiscord ?? ''),
+                  //   onTap: () {},
+                  // ),
                   ListTile(
                     title: Text(context.localizations?.pageBurgerMenuSectionSystem ?? ''),
                   ),
