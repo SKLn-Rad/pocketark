@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
+import 'package:pocketark/widgets/tiles/event_card.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../../extensions/event_extensions.dart';
@@ -18,14 +19,14 @@ class EventTile extends StatefulWidget {
     required this.onToggleMute,
     this.isLargeFormat = true,
     this.isExpanded = false,
-    this.isMuted = false,
+    this.isGlobalAlarmActive = false,
     Key? key,
   }) : super(key: key);
 
   final LostArkEvent event;
   final bool isLargeFormat;
   final bool isExpanded;
-  final bool isMuted;
+  final bool isGlobalAlarmActive;
   final VoidCallback onToggleMute;
 
   @override
@@ -70,41 +71,40 @@ class _EventTileState extends State<EventTile> {
   Widget build(BuildContext context) {
     final String nextEventCountdown = widget.event.getNextEventTimeAsString;
     final String nextEventCaption = nextEventCountdown.isNotEmpty ? context.localizations!.pageEventsTileCaptionNextEventIn(widget.event.getEventTypeAsString(context)) : context.localizations!.pageEventsTileCaptionNoMoreEvents;
-    final String muteActionLabel = widget.isMuted ? context.localizations!.sharedActionsUnmute : context.localizations!.sharedActionsMute;
+    final String muteActionLabel = widget.isGlobalAlarmActive ? context.localizations!.sharedActionsUnmute : context.localizations!.sharedActionsMute;
 
-    return AnimatedOpacity(
-      duration: kBasicAnimationDuration,
-      opacity: widget.isMuted ? kDisabledOpacity : kEnabledOpacity,
-      child: InqvineTapHandler(
-        onTap: () => isExpanded = !isExpanded,
-        child: Card(
-          child: Padding(
-            padding: kSpacingSmall.asPaddingAll,
-            child: InqvineConditionalExpanded(
-              isExpanded: isExpanded,
-              collapsedChild: _EventTileHeader(kImageRadius: kImageRadius, widget: widget, nextEventCaption: nextEventCaption),
-              expandedChild: Column(
-                children: <Widget>[
-                  _EventTileHeader(kImageRadius: kImageRadius, widget: widget, nextEventCaption: nextEventCaption),
-                  kSpacingSmall.asHeightWidget,
-                  SizedBox(
-                    width: double.infinity,
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: kSpacingSmall,
-                      runSpacing: kSpacingSmall,
-                      children: <Widget>[
-                        MaterialButton(
-                          color: kTertiaryColor,
-                          onPressed: widget.onToggleMute,
-                          child: Text(muteActionLabel),
-                        ),
-                      ],
-                    ),
+    return InqvineTapHandler(
+      onTap: () => isExpanded = !isExpanded,
+      //! readd this once InqvineTapHandler is updated
+      // opacityTarget: 1.0,
+      child: EventCard(
+        borderColour: widget.isGlobalAlarmActive ? kHighlightColor : null,
+        child: Padding(
+          padding: kSpacingSmall.asPaddingAll,
+          child: InqvineConditionalExpanded(
+            isExpanded: isExpanded,
+            collapsedChild: _EventTileHeader(kImageRadius: kImageRadius, widget: widget, nextEventCaption: nextEventCaption),
+            expandedChild: Column(
+              children: <Widget>[
+                _EventTileHeader(kImageRadius: kImageRadius, widget: widget, nextEventCaption: nextEventCaption),
+                kSpacingSmall.asHeightWidget,
+                SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: kSpacingSmall,
+                    runSpacing: kSpacingSmall,
+                    children: <Widget>[
+                      MaterialButton(
+                        color: kTertiaryColor,
+                        onPressed: widget.onToggleMute,
+                        child: Text(muteActionLabel),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

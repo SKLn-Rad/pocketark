@@ -11,8 +11,9 @@ const String kEventIconPrefix = 'https://lostarkcodex.com/icons/';
 // Shared Preference Keys
 const String kSharedKeySettingsTimezone = 'pocketark-settings-timezone';
 const String kSharedKeyTermsAccepted = 'pocketark-terms-accepted';
-const String kSharedKeyMutedEvent = 'pocketark-events-muted-';
-const String kSharedKeyHideMutedEvents = 'pocketark-events-hide-muted';
+const String kSharedKeyEventAlarms = 'pocketark-events-alarm-';
+const String kSharedKeyEventGlobalAlarm = 'pocketark-events-alarm-';
+const String kSharedKeyHideEventsWithoutAlarms = 'pocketark-events-show-alarmed';
 const String kSharedKeyNotificationPreTime = 'pocketark-events-time-before-notification';
 const String kSharedKeyNotificationEnabledFlag = 'pocketark-events-notifications-enabled';
 

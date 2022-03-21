@@ -11,12 +11,13 @@ import '../../../events/events_updated_event.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../services/service_configuration.dart';
 import '../../../proto/events.pb.dart';
+import '../../../structure/lost_ark_event_schedule.dart';
 
 enum EventDropdownAction {
   selectDate,
-  unmuteAllEvents,
-  muteAllEvents,
-  toggleHideMutedEvents,
+  enableAllGlobalEventAlarms,
+  disableAllGlobalEventAlarms,
+  toggleHideEventsWithoutAlarms,
 }
 
 extension EventDropdownActionExtensions on EventDropdownAction {
@@ -25,11 +26,11 @@ extension EventDropdownActionExtensions on EventDropdownAction {
     switch (this) {
       case EventDropdownAction.selectDate:
         return localizations!.pageEventsComponentsAppBarActionsSelectDate;
-      case EventDropdownAction.unmuteAllEvents:
+      case EventDropdownAction.enableAllGlobalEventAlarms:
         return localizations!.pageEventsComponentsAppBarActionsUnmuteAll;
-      case EventDropdownAction.muteAllEvents:
+      case EventDropdownAction.disableAllGlobalEventAlarms:
         return localizations!.pageEventsComponentsAppBarActionsMuteAll;
-      case EventDropdownAction.toggleHideMutedEvents:
+      case EventDropdownAction.toggleHideEventsWithoutAlarms:
         return meta == true ? localizations!.pageEventsComponentsAppBarActionsShowMuted : localizations!.pageEventsComponentsAppBarActionsHideMuted;
     }
   }
@@ -53,10 +54,10 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     notifyListeners();
   }
 
-  bool _hideMutedEvents = false;
-  bool get hideMutedEvents => _hideMutedEvents;
-  set hideMutedEvents(bool val) {
-    _hideMutedEvents = val;
+  bool _hideEventsWithoutAlarms = false;
+  bool get hideEventsWithoutAlarms => _hideEventsWithoutAlarms;
+  set hideEventsWithoutAlarms(bool val) {
+    _hideEventsWithoutAlarms = val;
     notifyListeners();
   }
 
@@ -72,7 +73,7 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     streamSubscriptionAdverts = inqvine.getEventStream<AdvertsUpdatedEvent>().listen((_) => notifyListeners());
     streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen(filterEvents);
 
-    hideMutedEvents = sharedPreferences.getBool(kSharedKeyHideMutedEvents) ?? false;
+    hideEventsWithoutAlarms = sharedPreferences.getBool(kSharedKeyHideEventsWithoutAlarms) ?? false;
     filterEvents(const EventsUpdatedEvent(shouldSort: true));
   }
 
@@ -88,22 +89,22 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
           case EventDropdownAction.selectDate:
             await onSetDateRequested(context);
             break;
-          case EventDropdownAction.unmuteAllEvents:
-            await eventService.unmuteAllEvents();
+          case EventDropdownAction.enableAllGlobalEventAlarms:
+            await eventService.enableAllGlobalEventAlarms();
             break;
-          case EventDropdownAction.muteAllEvents:
-            await eventService.muteAllEvents();
+          case EventDropdownAction.disableAllGlobalEventAlarms:
+            await eventService.disableAllGlobalEventAlarms();
             break;
-          case EventDropdownAction.toggleHideMutedEvents:
+          case EventDropdownAction.toggleHideEventsWithoutAlarms:
             await toggleHideMutedEvents();
             break;
         }
       });
 
   Future<void> toggleHideMutedEvents() async {
-    'Toggling hide muted events to ${!hideMutedEvents}'.logInfo();
-    hideMutedEvents = !hideMutedEvents;
-    await sharedPreferences.setBool(kSharedKeyHideMutedEvents, hideMutedEvents);
+    'Toggling hide muted events to ${!hideEventsWithoutAlarms}'.logInfo();
+    hideEventsWithoutAlarms = !hideEventsWithoutAlarms;
+    await sharedPreferences.setBool(kSharedKeyHideEventsWithoutAlarms, hideEventsWithoutAlarms);
   }
 
   Future<void> onSetDateRequested(BuildContext context) async {
@@ -132,12 +133,12 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
 
   Future<void> toggleEventMute(LostArkEvent event) => handleAction(() async {
         'Toggling mute of event: ${event.fallbackName}'.logInfo();
-        final bool isMuted = eventService.isEventMuted(event);
+        final bool isGlobalEventAlarmActive = eventService.isGlobalEventAlarmActive(event);
 
-        if (isMuted) {
-          await eventService.unmuteEvent(event, shouldReschedule: true);
+        if (isGlobalEventAlarmActive) {
+          await eventService.disableGlobalEventAlarm(event, shouldReschedule: true);
         } else {
-          await eventService.muteEvent(event, shouldReschedule: true);
+          await eventService.enableGlobalEventAlarm(event, shouldReschedule: true);
         }
       });
 
@@ -153,12 +154,12 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
         filteredEvents.clear();
         notifyListeners();
 
-        for (final LostArkEvent oldEvent in eventService.events.values) {
+        for (final LostArkEventSchedule oldEventSchedule in eventService.eventSchedules.values) {
           final LostArkEvent newEvent = LostArkEvent.create()
-            ..mergeFromMessage(oldEvent)
+            ..mergeFromMessage(oldEventSchedule.event)
             ..schedule.clear();
 
-          for (final LostArkEvent_LostArkEventSchedule schedule in oldEvent.schedule) {
+          for (final LostArkEvent_LostArkEventSchedule schedule in oldEventSchedule.event.schedule) {
             final int eventStartUtc = schedule.timeStart.toInt();
             final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(eventStartUtc);
 

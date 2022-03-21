@@ -33,19 +33,19 @@ class EventsView extends HookConsumerWidget {
                 ),
                 const PopupMenuDivider(),
                 PopupMenuItem<EventDropdownAction>(
-                  value: EventDropdownAction.muteAllEvents,
-                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.muteAllEvents),
-                  child: Text(EventDropdownAction.muteAllEvents.toLocale(context)),
+                  value: EventDropdownAction.disableAllGlobalEventAlarms,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.disableAllGlobalEventAlarms),
+                  child: Text(EventDropdownAction.disableAllGlobalEventAlarms.toLocale(context)),
                 ),
                 PopupMenuItem<EventDropdownAction>(
-                  value: EventDropdownAction.unmuteAllEvents,
-                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.unmuteAllEvents),
-                  child: Text(EventDropdownAction.unmuteAllEvents.toLocale(context)),
+                  value: EventDropdownAction.enableAllGlobalEventAlarms,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.enableAllGlobalEventAlarms),
+                  child: Text(EventDropdownAction.enableAllGlobalEventAlarms.toLocale(context)),
                 ),
                 PopupMenuItem<EventDropdownAction>(
-                  value: EventDropdownAction.toggleHideMutedEvents,
-                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.toggleHideMutedEvents),
-                  child: Text(EventDropdownAction.toggleHideMutedEvents.toLocale(context, meta: viewModel.hideMutedEvents)),
+                  value: EventDropdownAction.toggleHideEventsWithoutAlarms,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.toggleHideEventsWithoutAlarms),
+                  child: Text(EventDropdownAction.toggleHideEventsWithoutAlarms.toLocale(context, meta: viewModel.hideEventsWithoutAlarms)),
                 ),
               ];
             },

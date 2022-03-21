@@ -28,9 +28,9 @@ class EventList extends StatelessWidget {
     }
 
     // Hide muted is required
-    final bool hideMuted = viewModel.hideMutedEvents;
-    if (hideMuted) {
-      localFilteredEvents.removeWhere((element) => viewModel.eventService.isEventMuted(element));
+    final bool hideEventsWithoutAlarms = viewModel.hideEventsWithoutAlarms;
+    if (hideEventsWithoutAlarms) {
+      localFilteredEvents.removeWhere((element) => viewModel.eventService.isGlobalEventAlarmActive(element) == false);
     }
 
     return ListView.separated(
@@ -40,10 +40,10 @@ class EventList extends StatelessWidget {
       separatorBuilder: (_, __) => kSpacingMedium.asHeightWidget,
       itemBuilder: (_, int index) {
         final LostArkEvent event = localFilteredEvents[index];
-        final bool isMuted = viewModel.eventService.isEventMuted(event);
+        final bool isActive = viewModel.eventService.isGlobalEventAlarmActive(event);
         return EventTile(
           event: event,
-          isMuted: isMuted,
+          isGlobalAlarmActive: isActive,
           onToggleMute: () => viewModel.toggleEventMute(event),
         );
       },

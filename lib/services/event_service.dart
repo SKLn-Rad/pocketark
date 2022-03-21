@@ -20,6 +20,7 @@ import '../services/service_configuration.dart';
 import '../extensions/event_extensions.dart';
 import '../proto/events.pb.dart';
 import '../events/events_updated_event.dart';
+import '../structure/lost_ark_event_schedule.dart';
 
 class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   static const String kEventCollectionName = 'events';
@@ -30,7 +31,7 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   StreamSubscription<QuerySnapshot<Object?>>? eventsSubscription;
 
   //* All events detected
-  final BiMap<QueryDocumentSnapshot, LostArkEvent> events = BiMap();
+  final BiMap<QueryDocumentSnapshot, LostArkEventSchedule> eventSchedules = BiMap();
 
   @override
   Future<void> initializeService() async {
@@ -58,7 +59,7 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   Future<void> onUserChanged(User? user) async {
     'Detected user change from $runtimeType'.logInfo();
     await eventsSubscription?.cancel();
-    events.clear();
+    eventSchedules.clear();
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
 
     if (user == null) {
@@ -71,20 +72,21 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
 
   void onEventsChanged(QuerySnapshot<Object?> eventQuerySnapshot) {
     'Detected events changed'.logInfo();
-    events.clear();
+    eventSchedules.clear();
 
     for (final QueryDocumentSnapshot<Object?> eventSnapshot in eventQuerySnapshot.docs) {
       final LostArkEvent event = LostArkEvent.create()..mergeFromProto3Json(eventSnapshot.data(), ignoreUnknownFields: true);
-      events.putIfAbsent(eventSnapshot, () => event);
+      eventSchedules.putIfAbsent(eventSnapshot, () => LostArkEventSchedule(event));
     }
 
-    'Found ${events.length} new events'.logInfo();
+    'Found ${eventSchedules.length} new eventSchedules'.logInfo();
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
     unawaited(scheduleNotifications());
   }
 
   Future<void> scheduleNotifications() async {
     // Unschedule all notifications
+    //* should this be the case? or should we keep track of notifications and only update the ones needed?
     await localNotifications.cancelAll();
 
     // Get and check context
@@ -108,12 +110,47 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     int notificationId = 0;
     final int timeMinutesBeforeNotification = sharedPreferences.getInt(kSharedKeyNotificationPreTime) ?? 5;
 
-    for (final LostArkEvent event in events.values) {
-      if (isEventMuted(event)) {
+    for (final LostArkEventSchedule eventSchedule in eventSchedules.values) {
+      if (!isGlobalEventAlarmActive(eventSchedule.event)) {
+        for (DateTime time in eventSchedule.getAlarms) {
+          //! I am unsure if tz.UTC is correct here, I need to check what the "time" variable from getAlarms is:
+          final tz.TZDateTime scheduleTime = tz.TZDateTime.from(time, tz.UTC).subtract(Duration(minutes: timeMinutesBeforeNotification));
+          final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
+
+          //* Do not schedule in the past (Add one second for logic completion)
+          if (currentTime.millisecondsSinceEpoch > scheduleTime.millisecondsSinceEpoch - 1000) {
+            continue;
+          }
+
+          //* Do not schedule too far into the future (6 hours)
+          //? Milliseconds * Seconds * Minutes * Hours (this is 1 hour?)
+          if (currentTime.millisecondsSinceEpoch + (1000 * 60 * 60 * 1) < scheduleTime.millisecondsSinceEpoch) {
+            continue;
+          }
+
+          await localNotifications.zonedSchedule(
+            notificationId,
+            eventSchedule.event.eventNameWithItemLevel,
+            localizations.eventNotificationDescription(timeMinutesBeforeNotification),
+            scheduleTime,
+            const NotificationDetails(
+              android: AndroidNotificationDetails(kApplicationName, kApplicationName),
+              iOS: IOSNotificationDetails(threadIdentifier: kApplicationName),
+            ),
+            uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+            androidAllowWhileIdle: true,
+          );
+
+          //* Break if too many notifications are schedules
+          notificationId++;
+          if (notificationId > 400) {
+            break;
+          }
+        }
         return;
       }
 
-      for (final LostArkEvent_LostArkEventSchedule schedule in event.schedule) {
+      for (final LostArkEvent_LostArkEventSchedule schedule in eventSchedule.event.schedule) {
         final tz.TZDateTime scheduleTime = tz.TZDateTime.fromMillisecondsSinceEpoch(tz.UTC, schedule.timeStart.toInt()).subtract(Duration(minutes: timeMinutesBeforeNotification));
         final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
 
@@ -123,13 +160,14 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
         }
 
         //* Do not schedule too far into the future (6 hours)
+        //? Milliseconds * Seconds * Minutes * Hours (this is 1 hour?)
         if (currentTime.millisecondsSinceEpoch + (1000 * 60 * 60 * 1) < scheduleTime.millisecondsSinceEpoch) {
           continue;
         }
 
         await localNotifications.zonedSchedule(
           notificationId,
-          event.eventNameWithItemLevel,
+          eventSchedule.event.eventNameWithItemLevel,
           localizations.eventNotificationDescription(timeMinutesBeforeNotification),
           scheduleTime,
           const NotificationDetails(
@@ -151,30 +189,45 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     'Scheduled notifications successfully'.logDebug();
   }
 
-  bool isEventMuted(LostArkEvent event) {
-    final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
+  bool isGlobalEventAlarmActive(LostArkEvent event) {
+    final String sharedKey = '$kSharedKeyEventGlobalAlarm${event.id}';
     return sharedPreferences.containsKey(sharedKey) && sharedPreferences.getBool(sharedKey) == true;
   }
 
-  Future<void> unmuteAllEvents() async {
-    for (final LostArkEvent event in events.values) {
-      await unmuteEvent(event);
+  Future<void> enableAllGlobalEventAlarms() async {
+    for (final LostArkEventSchedule eventSchedule in eventSchedules.values) {
+      await enableGlobalEventAlarm(eventSchedule.event);
     }
 
     await scheduleNotifications();
   }
 
-  Future<void> muteAllEvents() async {
-    for (final LostArkEvent event in events.values) {
-      await muteEvent(event);
+  Future<void> disableAllGlobalEventAlarms() async {
+    for (final LostArkEventSchedule eventSchedule in eventSchedules.values) {
+      await disableGlobalEventAlarm(eventSchedule.event);
     }
 
     await scheduleNotifications();
   }
 
-  Future<void> unmuteEvent(LostArkEvent event, {bool shouldReschedule = false}) async {
+  Future<void> enableGlobalEventAlarm(LostArkEvent event, {bool shouldReschedule = false}) async {
     'Unmuting event: ${event.fallbackName}'.logInfo();
-    final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
+    final String sharedKey = '$kSharedKeyEventGlobalAlarm${event.id}';
+
+    //? set global event alarm to on (true)
+    await sharedPreferences.setBool(sharedKey, true);
+    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+
+    if (shouldReschedule) {
+      await scheduleNotifications();
+    }
+  }
+
+  Future<void> disableGlobalEventAlarm(LostArkEvent event, {bool shouldReschedule = false}) async {
+    'Muting event: ${event.fallbackName}'.logInfo();
+    final String sharedKey = '$kSharedKeyEventGlobalAlarm${event.id}';
+
+    //? set global event alarm to off (false)
     await sharedPreferences.setBool(sharedKey, false);
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
 
@@ -183,11 +236,47 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     }
   }
 
-  Future<void> muteEvent(LostArkEvent event, {bool shouldReschedule = false}) async {
-    'Muting event: ${event.fallbackName}'.logInfo();
-    final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
-    await sharedPreferences.setBool(sharedKey, true);
-    inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+  Future<void> addAlarm(LostArkEventSchedule eventSchedule, DateTime alarmDateTime, {bool shouldReschedule = false}) async {
+    'Muting event: ${eventSchedule.event.fallbackName}'.logInfo();
+    final String alarmString = alarmDateTime.toString();
+    final String sharedKey = '$kSharedKeyEventAlarms${eventSchedule.event.id}';
+
+    final List<String> timeList = sharedPreferences.getStringList(sharedKey) ?? <String>[];
+
+    //* Check if shared pref list contains the time already, otherwise add it
+    if (timeList.contains(alarmString)) {
+    } else {
+      timeList.add(alarmString);
+      await sharedPreferences.setStringList(sharedKey, timeList);
+      inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+    }
+
+    if (shouldReschedule) {
+      await scheduleNotifications();
+    }
+  }
+
+  Future<void> removeAlarm(LostArkEventSchedule eventSchedule, DateTime alarmDateTime, {bool shouldReschedule = false}) async {
+    'Removing the alarm for event: ${eventSchedule.event.fallbackName}'.logInfo();
+    final String alarmString = alarmDateTime.toString();
+    final String sharedKey = '$kSharedKeyEventAlarms${eventSchedule.event.id}';
+
+    final List<String> timeList = sharedPreferences.getStringList(sharedKey) ?? <String>[];
+
+    //* Check if user data for this event exists
+    if (sharedPreferences.containsKey(sharedKey)) {
+      //* Check if shared pref list contains the time then remove it
+      if (timeList.contains(alarmString)) {
+        timeList.removeWhere((element) => element == alarmString);
+        await sharedPreferences.setStringList(sharedKey, timeList);
+        inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+        'Removed the alarm from event ${eventSchedule.event.fallbackName} at time: ${alarmDateTime}'.logInfo();
+      } else {
+        'Alarm not found'.logInfo();
+      }
+    } else {
+      'Could not find event ${eventSchedule.event.fallbackName} in user preferances'.logInfo();
+    }
 
     if (shouldReschedule) {
       await scheduleNotifications();
