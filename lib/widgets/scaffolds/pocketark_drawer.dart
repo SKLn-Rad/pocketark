@@ -40,12 +40,12 @@ class PocketArkDrawer extends StatelessWidget {
                     title: Text(context.localizations?.pageBurgerMenuLabelEvents ?? ''),
                     onTap: () => kRouter.go(kRoutePathEvents),
                   ),
-                  ListTile(
-                    dense: true,
-                    leading: const Icon(Ionicons.timer_outline),
-                    title: Text(context.localizations?.pageBurgerMenuLabelResets ?? ''),
-                    onTap: () {},
-                  ),
+                  // ListTile(
+                  //   dense: true,
+                  //   leading: const Icon(Ionicons.timer_outline),
+                  //   title: Text(context.localizations?.pageBurgerMenuLabelResets ?? ''),
+                  //   onTap: () {},
+                  // ),
                   ListTile(
                     title: Text(context.localizations?.pageBurgerMenuSectionCommunity ?? ''),
                   ),
