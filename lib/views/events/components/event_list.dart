@@ -27,6 +27,12 @@ class EventList extends StatelessWidget {
       localFilteredEvents.removeWhere((element) => !element.eventNameWithItemLevel.toLowerCase().contains(searchText));
     }
 
+    // Hide muted is required
+    final bool hideMuted = viewModel.hideMutedEvents;
+    if (hideMuted) {
+      localFilteredEvents.removeWhere((element) => viewModel.eventService.isEventMuted(element));
+    }
+
     return ListView.separated(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -35,7 +41,11 @@ class EventList extends StatelessWidget {
       itemBuilder: (_, int index) {
         final LostArkEvent event = localFilteredEvents[index];
         final bool isMuted = viewModel.eventService.isEventMuted(event);
-        return EventTile(event: event, isMuted: isMuted);
+        return EventTile(
+          event: event,
+          isMuted: isMuted,
+          onToggleMute: () => viewModel.toggleEventMute(event),
+        );
       },
     );
   }

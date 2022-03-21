@@ -28,8 +28,8 @@ class SettingsView extends HookConsumerWidget {
           // SettingsCardFilterSettings(viewModel: viewModel),
           // kSpacingMedium.asHeightWidget,
           SettingsCardNotificationsSettings(viewModel: viewModel),
-          kSpacingMedium.asHeightWidget,
-          SettingsCardSystemSettings(viewModel: viewModel),
+          // kSpacingMedium.asHeightWidget,
+          // SettingsCardSystemSettings(viewModel: viewModel),
           kSpacingExtraLarge.asHeightWidget,
           InqvineTapHandler(
             isEnabled: !viewModel.isBusy,

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/events/adverts_updated_event.dart';
 
+import '../../../events/adverts_updated_event.dart';
+import '../../../constants/application_constants.dart';
 import '../../../events/events_updated_event.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../services/service_configuration.dart';
@@ -15,10 +16,11 @@ enum EventDropdownAction {
   selectDate,
   unmuteAllEvents,
   muteAllEvents,
+  toggleHideMutedEvents,
 }
 
 extension EventDropdownActionExtensions on EventDropdownAction {
-  String toLocale(BuildContext context) {
+  String toLocale(BuildContext context, {dynamic meta}) {
     final AppLocalizations? localizations = context.localizations;
     switch (this) {
       case EventDropdownAction.selectDate:
@@ -27,6 +29,8 @@ extension EventDropdownActionExtensions on EventDropdownAction {
         return localizations!.pageEventsComponentsAppBarActionsUnmuteAll;
       case EventDropdownAction.muteAllEvents:
         return localizations!.pageEventsComponentsAppBarActionsMuteAll;
+      case EventDropdownAction.toggleHideMutedEvents:
+        return meta == true ? localizations!.pageEventsComponentsAppBarActionsShowMuted : localizations!.pageEventsComponentsAppBarActionsHideMuted;
     }
   }
 }
@@ -49,6 +53,13 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     notifyListeners();
   }
 
+  bool _hideMutedEvents = false;
+  bool get hideMutedEvents => _hideMutedEvents;
+  set hideMutedEvents(bool val) {
+    _hideMutedEvents = val;
+    notifyListeners();
+  }
+
   @override
   void onFirstRender() {
     super.onFirstRender();
@@ -60,6 +71,8 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     await streamSubscriptionEvents?.cancel();
     streamSubscriptionAdverts = inqvine.getEventStream<AdvertsUpdatedEvent>().listen((_) => notifyListeners());
     streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen(filterEvents);
+
+    hideMutedEvents = sharedPreferences.getBool(kSharedKeyHideMutedEvents) ?? false;
     filterEvents(const EventsUpdatedEvent(shouldSort: true));
   }
 
@@ -81,8 +94,17 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
           case EventDropdownAction.muteAllEvents:
             await eventService.muteAllEvents();
             break;
+          case EventDropdownAction.toggleHideMutedEvents:
+            await toggleHideMutedEvents();
+            break;
         }
       });
+
+  Future<void> toggleHideMutedEvents() async {
+    'Toggling hide muted events to ${!hideMutedEvents}'.logInfo();
+    hideMutedEvents = !hideMutedEvents;
+    await sharedPreferences.setBool(kSharedKeyHideMutedEvents, hideMutedEvents);
+  }
 
   Future<void> onSetDateRequested(BuildContext context) async {
     final DateTime currentDateTime = DateTime.now().toUtc();
@@ -107,6 +129,17 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     selectedDate = newDate;
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
   }
+
+  Future<void> toggleEventMute(LostArkEvent event) => handleAction(() async {
+        'Toggling mute of event: ${event.fallbackName}'.logInfo();
+        final bool isMuted = eventService.isEventMuted(event);
+
+        if (isMuted) {
+          await eventService.unmuteEvent(event, shouldReschedule: true);
+        } else {
+          await eventService.muteEvent(event, shouldReschedule: true);
+        }
+      });
 
   Future<void> filterEvents(EventsUpdatedEvent event) => handleAction(() async {
         notifyListeners();

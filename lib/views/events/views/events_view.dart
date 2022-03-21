@@ -31,6 +31,7 @@ class EventsView extends HookConsumerWidget {
                   onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.selectDate),
                   child: Text(EventDropdownAction.selectDate.toLocale(context)),
                 ),
+                const PopupMenuDivider(),
                 PopupMenuItem<EventDropdownAction>(
                   value: EventDropdownAction.muteAllEvents,
                   onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.muteAllEvents),
@@ -40,6 +41,11 @@ class EventsView extends HookConsumerWidget {
                   value: EventDropdownAction.unmuteAllEvents,
                   onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.unmuteAllEvents),
                   child: Text(EventDropdownAction.unmuteAllEvents.toLocale(context)),
+                ),
+                PopupMenuItem<EventDropdownAction>(
+                  value: EventDropdownAction.toggleHideMutedEvents,
+                  onTap: () => viewModel.onDropdownActionSelected(context, EventDropdownAction.toggleHideMutedEvents),
+                  child: Text(EventDropdownAction.toggleHideMutedEvents.toLocale(context, meta: viewModel.hideMutedEvents)),
                 ),
               ];
             },

@@ -10,6 +10,8 @@
     "pageEventsComponentsAppBarActionsSelectDate": "Select Date",
     "pageEventsComponentsAppBarActionsMuteAll": "Mute All",
     "pageEventsComponentsAppBarActionsUnmuteAll": "Unmute All",
+    "pageEventsComponentsAppBarActionsHideMuted": "Hide Muted",
+    "pageEventsComponentsAppBarActionsShowMuted": "Show Muted",
     "pageEventsComponentsEventsCaptionShownDate": "Showing results from {date}",
     "@pageEventsComponentsEventsCaptionShownDate" : {
         "placeholders": {
@@ -67,6 +69,8 @@
     "sharedActionsRetry": "Retry",
     "sharedActionsContinue": "Continue",
     "sharedActionsSave": "Save",
+    "sharedActionsMute": "Mute",
+    "sharedActionsUnmute": "Unmute",
     
     "sharedTimezonesUSWest": "US West (UTC-7)",
     "sharedTimezonesUSEast": "US East (UTC-4)",
