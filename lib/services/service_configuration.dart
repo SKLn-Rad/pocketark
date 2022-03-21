@@ -10,7 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // Project imports:
 import '../constants/application_constants.dart';
@@ -46,6 +46,9 @@ Future<void> configurePocketArkServices() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
   inqvine.registerInLocator(flutterLocalNotificationsPlugin);
 
+  final MobileAds mobileAds = MobileAds.instance;
+  inqvine.registerInLocator(mobileAds);
+
   // Needed for schedule pushes
   tz.initializeTimeZones();
 
@@ -69,6 +72,7 @@ mixin PocketArkServiceMixin {
   FirebaseApp get firebaseApp => inqvine.getFromLocator();
   FirebaseFirestore get firebaseFirestore => inqvine.getFromLocator();
   FirebaseAuth get firebaseAuth => inqvine.getFromLocator();
+  MobileAds get mobileAds => inqvine.getFromLocator();
   SharedPreferences get sharedPreferences => inqvine.getFromLocator();
   FlutterLocalNotificationsPlugin get localNotifications => inqvine.getFromLocator();
   Cron get cron => inqvine.getFromLocator();

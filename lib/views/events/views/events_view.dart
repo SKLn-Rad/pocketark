@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
 import 'package:ionicons/ionicons.dart';
@@ -46,42 +47,57 @@ class EventsView extends HookConsumerWidget {
           ),
         ],
       ),
-      body: ListView(
-        padding: kSpacingLarge.asPaddingAll,
+      body: Column(
         children: <Widget>[
-          Text(
-            context.localizations?.pageEventsComponentsEventsCaptionShownDate(viewModel.selectedDate.ddMMyyyy) ?? '',
-            textAlign: TextAlign.center,
-            style: context.textTheme.caption!.copyWith(
-              color: kGrayLight,
+          Expanded(
+            child: ListView(
+              padding: kSpacingLarge.asPaddingAll,
+              children: <Widget>[
+                Text(
+                  context.localizations?.pageEventsComponentsEventsCaptionShownDate(viewModel.selectedDate.ddMMyyyy) ?? '',
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.caption!.copyWith(
+                    color: kGrayLight,
+                  ),
+                ),
+                InqvineTapHandler(
+                  onTap: () => viewModel.systemService.openUrl(kUrlLostArkTimer),
+                  child: Text(
+                    context.localizations?.pageEventsComponentsEventsCaptionPoweredBy ?? '',
+                    textAlign: TextAlign.center,
+                    style: context.textTheme.caption!.copyWith(
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                ),
+                kSpacingMedium.asHeightWidget,
+                if (viewModel.filteredEvents.isEmpty && viewModel.isBusy) ...<Widget>[
+                  const PocketArkLoadingIndicator(),
+                ],
+                if (viewModel.filteredEvents.isNotEmpty) ...<Widget>[
+                  TextFormField(
+                    controller: viewModel.searchController,
+                    onChanged: (String val) => viewModel.searchText = val,
+                    decoration: InputDecoration(
+                      hintText: context.localizations?.pageEventsComponentsEventsTooltipsSearch ?? '',
+                    ),
+                  ),
+                  kSpacingMedium.asHeightWidget,
+                  EventList(viewModel: viewModel),
+                ],
+              ],
             ),
           ),
-          InqvineTapHandler(
-            onTap: () => viewModel.systemService.openUrl(kUrlLostArkTimer),
-            child: Text(
-              context.localizations?.pageEventsComponentsEventsCaptionPoweredBy ?? '',
-              textAlign: TextAlign.center,
-              style: context.textTheme.caption!.copyWith(
-                color: kPrimaryColor,
-              ),
+          if (viewModel.applicationService.mobileSplashBannerAd != null) ...<Widget>[
+            SizedBox(
+              height: kAdvertHeight,
+              width: double.infinity,
+              child: AdWidget(ad: viewModel.applicationService.mobileSplashBannerAd!),
             ),
-          ),
-          kSpacingMedium.asHeightWidget,
-          if (viewModel.filteredEvents.isEmpty && viewModel.isBusy) ...<Widget>[
-            const PocketArkLoadingIndicator(),
           ],
-          if (viewModel.filteredEvents.isNotEmpty) ...<Widget>[
-            TextFormField(
-              controller: viewModel.searchController,
-              onChanged: (String val) => viewModel.searchText = val,
-              decoration: InputDecoration(
-                hintText: context.localizations?.pageEventsComponentsEventsTooltipsSearch ?? '',
-              ),
-            ),
-            kSpacingMedium.asHeightWidget,
-            EventList(viewModel: viewModel),
+          if (!viewModel.applicationService.advertsInitialized) ...<Widget>[
+            Container(height: kAdvertHeight, width: double.infinity, color: Colors.black),
           ],
-          context.devicePadding.bottom.asHeightWidget,
         ],
       ),
     );

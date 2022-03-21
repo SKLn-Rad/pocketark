@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/events/adverts_updated_event.dart';
 
 import '../../../events/events_updated_event.dart';
 import '../../../extensions/context_extensions.dart';
@@ -34,7 +36,11 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   final List<LostArkEvent> filteredEvents = <LostArkEvent>[];
 
   StreamSubscription<EventsUpdatedEvent>? streamSubscriptionEvents;
+  StreamSubscription<AdvertsUpdatedEvent>? streamSubscriptionAdverts;
   DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  BannerAd? _bannerAd;
+  BannerAd? get bannerAd => _bannerAd;
 
   String _searchText = '';
   String get searchText => _searchText;
@@ -50,7 +56,9 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
   }
 
   Future<void> bootstrap() async {
+    await streamSubscriptionAdverts?.cancel();
     await streamSubscriptionEvents?.cancel();
+    streamSubscriptionAdverts = inqvine.getEventStream<AdvertsUpdatedEvent>().listen((_) => notifyListeners());
     streamSubscriptionEvents = inqvine.getEventStream<EventsUpdatedEvent>().listen(filterEvents);
     filterEvents(const EventsUpdatedEvent(shouldSort: true));
   }

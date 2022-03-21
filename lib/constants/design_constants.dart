@@ -98,3 +98,6 @@ const Duration kBasicAnimationDuration = Duration(milliseconds: 250);
 const double kEnabledOpacity = 1.0;
 const double kDisabledOpacity = 0.33;
 const double kInvisibleOpacity = 0.00;
+
+// Heights and Widths
+const double kAdvertHeight = 50.0;

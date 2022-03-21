@@ -36,6 +36,7 @@ dependencies:
   mocktail: ^0.3.0
   quiver: ^3.0.1+1
   url_launcher: ^6.0.20
+  google_mobile_ads: ^1.1.0
 
 dev_dependencies:
   flutter_test:

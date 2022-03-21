@@ -17,3 +17,10 @@ const String kSharedKeyNotificationPreTime = 'pocketark-events-time-before-notif
 // Notifications
 const String kNotificationsAndroidIcon = 'ic_stat_push_icon';
 const String kNotificationsEventsGroupName = 'LostArk Events';
+
+// Mobile Ads
+const String kAdvertIOSID = 'ca-app-pub-6384622878140256~3050688649';
+const String kAdvertIOSSplashAdUnitId = 'ca-app-pub-6384622878140256/9186558446';
+const String kAdvertAndroidID = 'ca-app-pub-6384622878140256~1228177377';
+const String kAdvertAndroidSplashAdUnitId = 'ca-app-pub-6384622878140256/9041381920';
+const String kAdvertTestSplashAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
