@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
 import '../../settings/state/settings_view_model.dart';
-import '../../../enums/pocketark_timezone.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../constants/design_constants.dart';
 
@@ -48,6 +47,24 @@ class SettingsCardNotificationsSettings extends StatelessWidget {
               onChanged: (double val) => viewModel.notificationMinutes = val.floor(),
               min: 5,
               max: 60,
+            ),
+            kSpacingSmall.asHeightWidget,
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    context.localizations?.pageSettingsComponentSettingsNotificationsTooltipEnabled ?? '',
+                    style: context.textTheme.caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                kSpacingSmall.asWidthWidget,
+                Checkbox(
+                  value: viewModel.notificationsEnabled,
+                  onChanged: (bool? val) => viewModel.notificationsEnabled = val ?? true,
+                ),
+              ],
             ),
             kSpacingSmall.asHeightWidget,
             Align(

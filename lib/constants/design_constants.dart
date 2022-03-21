@@ -40,6 +40,10 @@ final ThemeData kThemeData = ThemeData(
     thumbColor: kHighlightColor,
     trackShape: PocketArkSliderTrackShape(),
   ),
+  checkboxTheme: CheckboxThemeData(
+    checkColor: MaterialStateProperty.all(Colors.white),
+    fillColor: MaterialStateProperty.all(kPrimaryColor),
+  ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: kPrimaryColor,
     selectedItemColor: Colors.white,
