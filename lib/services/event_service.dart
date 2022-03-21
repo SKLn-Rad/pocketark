@@ -98,6 +98,12 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
       return;
     }
 
+    final bool notificationsEnabled = sharedPreferences.getBool(kSharedKeyNotificationEnabledFlag) ?? true;
+    if (!notificationsEnabled) {
+      'Cannot schedule new notifications as disabled'.logInfo();
+      return;
+    }
+
     // Loop and check if muted
     int notificationId = 0;
     final int timeMinutesBeforeNotification = sharedPreferences.getInt(kSharedKeyNotificationPreTime) ?? 5;
