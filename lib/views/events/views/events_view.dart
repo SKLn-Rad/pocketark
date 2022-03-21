@@ -8,12 +8,9 @@ import '../../../constants/application_constants.dart';
 import '../../../widgets/indicators/pocketark_loading_indicator.dart';
 import '../../../constants/design_constants.dart';
 import '../../../extensions/context_extensions.dart';
-import '../../../extensions/event_extensions.dart';
-import '../../../proto/events.pb.dart';
 import '../../../views/events/state/events_view_model.dart';
 import '../../../widgets/scaffolds/pocketark_appbar.dart';
 import '../../../widgets/scaffolds/pocketark_scaffold.dart';
-import '../../../widgets/tiles/event_tile.dart';
 
 class EventsView extends HookConsumerWidget {
   const EventsView({Key? key}) : super(key: key);
@@ -23,6 +20,7 @@ class EventsView extends HookConsumerWidget {
     final EventsViewModel viewModel = useViewModel(ref, () => EventsViewModel());
 
     return PocketArkScaffold(
+      isBusy: viewModel.isBusy,
       appBar: PocketArkAppBar(
         actions: <Widget>[
           PopupMenuButton<EventDropdownAction>(

@@ -55,26 +55,26 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     filterEvents(const EventsUpdatedEvent(shouldSort: true));
   }
 
-  Future<void> onDropdownActionSelected(BuildContext context, EventDropdownAction? action) async {
-    if (action == null) {
-      return;
-    }
+  Future<void> onDropdownActionSelected(BuildContext context, EventDropdownAction? action) => handleAction(() async {
+        if (action == null) {
+          return;
+        }
 
-    'Handling action: $action'.logDebug();
-    await Future<void>.delayed(const Duration(milliseconds: 250));
+        'Handling action: $action'.logDebug();
+        await Future<void>.delayed(const Duration(milliseconds: 250));
 
-    switch (action) {
-      case EventDropdownAction.selectDate:
-        await onSetDateRequested(context);
-        break;
-      case EventDropdownAction.unmuteAllEvents:
-        await eventService.unmuteAllEvents();
-        break;
-      case EventDropdownAction.muteAllEvents:
-        await eventService.muteAllEvents();
-        break;
-    }
-  }
+        switch (action) {
+          case EventDropdownAction.selectDate:
+            await onSetDateRequested(context);
+            break;
+          case EventDropdownAction.unmuteAllEvents:
+            await eventService.unmuteAllEvents();
+            break;
+          case EventDropdownAction.muteAllEvents:
+            await eventService.muteAllEvents();
+            break;
+        }
+      });
 
   Future<void> onSetDateRequested(BuildContext context) async {
     final DateTime currentDateTime = DateTime.now().toUtc();

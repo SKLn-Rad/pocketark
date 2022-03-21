@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pocketark/widgets/sliders/pocketark_slider_track_shape.dart';
 
 final ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
@@ -33,6 +34,11 @@ final ThemeData kThemeData = ThemeData(
   ),
   iconTheme: const IconThemeData(
     color: Colors.white,
+  ),
+  sliderTheme: SliderThemeData(
+    activeTrackColor: kPrimaryColor,
+    thumbColor: kHighlightColor,
+    trackShape: PocketArkSliderTrackShape(),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: kPrimaryColor,
@@ -91,3 +97,4 @@ const Duration kBasicAnimationDuration = Duration(milliseconds: 250);
 // Opacities
 const double kEnabledOpacity = 1.0;
 const double kDisabledOpacity = 0.33;
+const double kInvisibleOpacity = 0.00;

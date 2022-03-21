@@ -19,6 +19,7 @@ dependencies:
   cloud_firestore: ^3.1.10
   shared_preferences: ^2.0.13
   flutter_local_notifications: ^9.4.0
+  cron: ^0.4.1
   
   # UI
   go_router: ^3.0.4

@@ -3,7 +3,10 @@ import 'dart:async';
 
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cron/cron.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:pocketark/constants/route_constants.dart';
@@ -11,6 +14,7 @@ import 'package:quiver/collection.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 // Project imports:
+import '../extensions/context_extensions.dart';
 import '../constants/application_constants.dart';
 import '../services/service_configuration.dart';
 import '../extensions/event_extensions.dart';
@@ -21,6 +25,7 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   static const String kEventCollectionName = 'events';
   static CollectionReference get kEventCollection => inqvine.getFromLocator<FirebaseFirestore>().collection(EventService.kEventCollectionName);
 
+  ScheduledTask? notificationScheduleTask;
   StreamSubscription<User?>? userSubscription;
   StreamSubscription<QuerySnapshot<Object?>>? eventsSubscription;
 
@@ -30,7 +35,14 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   @override
   Future<void> initializeService() async {
     prepareUserListeners();
+    prepareCronTabs();
     return super.initializeService();
+  }
+
+  Future<void> prepareCronTabs() async {
+    final Schedule notificationSchedule = Schedule.parse('1 * * * *');
+    await notificationScheduleTask?.cancel();
+    notificationScheduleTask = cron.schedule(notificationSchedule, scheduleNotifications);
   }
 
   Future<void> prepareUserListeners() async {
@@ -75,15 +87,28 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     // Unschedule all notifications
     await localNotifications.cancelAll();
 
+    // Get and check context
+    final BuildContext? context = kRouter.routerDelegate.navigatorKey.currentState?.context;
+    if (context == null) {
+      return;
+    }
+
+    final AppLocalizations? localizations = context.localizations;
+    if (localizations == null) {
+      return;
+    }
+
     // Loop and check if muted
     int notificationId = 0;
+    final int timeMinutesBeforeNotification = sharedPreferences.getInt(kSharedKeyNotificationPreTime) ?? 5;
+
     for (final LostArkEvent event in events.values) {
       if (isEventMuted(event)) {
         return;
       }
 
       for (final LostArkEvent_LostArkEventSchedule schedule in event.schedule) {
-        final tz.TZDateTime scheduleTime = tz.TZDateTime.fromMillisecondsSinceEpoch(tz.UTC, schedule.timeStart.toInt()).subtract(const Duration(minutes: 15));
+        final tz.TZDateTime scheduleTime = tz.TZDateTime.fromMillisecondsSinceEpoch(tz.UTC, schedule.timeStart.toInt()).subtract(Duration(minutes: timeMinutesBeforeNotification));
         final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
 
         //* Do not schedule in the past (Add one second for logic completion)
@@ -92,14 +117,14 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
         }
 
         //* Do not schedule too far into the future (6 hours)
-        if (currentTime.millisecondsSinceEpoch + (1000 * 60 * 60 * 12) > scheduleTime.millisecondsSinceEpoch) {
+        if (currentTime.millisecondsSinceEpoch + (1000 * 60 * 60 * 1) < scheduleTime.millisecondsSinceEpoch) {
           continue;
         }
 
         await localNotifications.zonedSchedule(
           notificationId,
           event.eventNameWithItemLevel,
-          'Event is starting in 15 minutes',
+          localizations.eventNotificationDescription(timeMinutesBeforeNotification),
           scheduleTime,
           const NotificationDetails(
             android: AndroidNotificationDetails(kApplicationName, kApplicationName),
@@ -109,9 +134,8 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
           androidAllowWhileIdle: true,
         );
 
-        notificationId++;
-
         //* Break if too many notifications are schedules
+        notificationId++;
         if (notificationId > 400) {
           break;
         }
@@ -130,25 +154,37 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     for (final LostArkEvent event in events.values) {
       await unmuteEvent(event);
     }
+
+    await scheduleNotifications();
   }
 
   Future<void> muteAllEvents() async {
     for (final LostArkEvent event in events.values) {
       await muteEvent(event);
     }
+
+    await scheduleNotifications();
   }
 
-  Future<void> unmuteEvent(LostArkEvent event) async {
+  Future<void> unmuteEvent(LostArkEvent event, {bool shouldReschedule = false}) async {
     'Unmuting event: ${event.fallbackName}'.logInfo();
     final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
     await sharedPreferences.setBool(sharedKey, false);
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+
+    if (shouldReschedule) {
+      await scheduleNotifications();
+    }
   }
 
-  Future<void> muteEvent(LostArkEvent event) async {
+  Future<void> muteEvent(LostArkEvent event, {bool shouldReschedule = false}) async {
     'Muting event: ${event.fallbackName}'.logInfo();
     final String sharedKey = '$kSharedKeyMutedEvent${event.id}';
     await sharedPreferences.setBool(sharedKey, true);
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
+
+    if (shouldReschedule) {
+      await scheduleNotifications();
+    }
   }
 }

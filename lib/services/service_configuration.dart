@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -12,6 +13,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 // Project imports:
+import '../constants/application_constants.dart';
 import '../services/auth_service.dart';
 import '../services/event_admin_service.dart';
 import '../services/event_service.dart';
@@ -32,12 +34,13 @@ Future<void> configurePocketArkServices() async {
   inqvine.registerInLocator<FirebaseApp>(firebaseApp);
   inqvine.registerInLocator<FirebaseFirestore>(FirebaseFirestore.instance);
   inqvine.registerInLocator<FirebaseAuth>(FirebaseAuth.instance);
+  inqvine.registerInLocator<Cron>(Cron());
 
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   inqvine.registerInLocator(sharedPreferences);
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('push_icon');
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(kNotificationsAndroidIcon);
   const IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
   const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
@@ -68,6 +71,7 @@ mixin PocketArkServiceMixin {
   FirebaseAuth get firebaseAuth => inqvine.getFromLocator();
   SharedPreferences get sharedPreferences => inqvine.getFromLocator();
   FlutterLocalNotificationsPlugin get localNotifications => inqvine.getFromLocator();
+  Cron get cron => inqvine.getFromLocator();
 }
 
 void onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {}

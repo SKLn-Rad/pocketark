@@ -24,6 +24,15 @@
     "pageSettingsComponentSettingsFilterSubheading": "Update event filters, and reminders.",
     "pageSettingsComponentSettingsFilterTooltipsTimezone": "Timezone:",
 
+    "pageSettingsComponentSettingsNotificationsHeading": "Notification settings",
+    "pageSettingsComponentSettingsNotificationsHelpNotifications": "To avoid spam, we will only notify you of events up to 6 hours ahead of when you last opened the app.",
+    "pageSettingsComponentSettingsNotificationsTooltipMinutes": "Notify me {minute} minutes before events",
+    "@pageSettingsComponentSettingsNotificationsTooltipMinutes": {
+        "placeholders": {
+            "minute": {}
+        }
+    },
+
     "pageSettingsComponentSettingsSystemHeading": "System settings",
     "pageSettingsComponentSettingsSystemSubheading": "Update system and device preferences.",
 
@@ -48,6 +57,7 @@
     "sharedDialogsHeadingsSuccess": "Success!",
     "sharedActionsRetry": "Retry",
     "sharedActionsContinue": "Continue",
+    "sharedActionsSave": "Save",
     
     "sharedTimezonesUSWest": "US West (UTC-7)",
     "sharedTimezonesUSEast": "US East (UTC-4)",
@@ -68,5 +78,12 @@
     "eventTypeSailing":"Sailing",
     "eventTypeSiege":"Siege",
     "eventTypeProvingGrounds":"Proving Grounds",
-    "eventTypeUnknown":"Unknown Event"
+    "eventTypeUnknown":"Unknown Event",
+
+    "eventNotificationDescription": "Event is starting in {time} minutes",
+    "@eventNotificationDescription": {
+        "placeholders": {
+            "time": {}
+        }
+    }
 }
