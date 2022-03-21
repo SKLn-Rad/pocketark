@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:pocketark/views/events/components/event_list.dart';
 
+import '../../../views/events/components/event_list.dart';
 import '../../../constants/application_constants.dart';
 import '../../../widgets/indicators/pocketark_loading_indicator.dart';
 import '../../../constants/design_constants.dart';
@@ -88,16 +87,17 @@ class EventsView extends HookConsumerWidget {
               ],
             ),
           ),
-          if (viewModel.applicationService.mobileSplashBannerAd != null) ...<Widget>[
-            SizedBox(
-              height: kAdvertHeight,
+          InqvineConditionalAutoHide(
+            isShown: viewModel.applicationService.mobileSplashBannerAd != null,
+            child: Container(
+              height: kAdvertHeight + (kSpacingTiny * 2),
               width: double.infinity,
-              child: AdWidget(ad: viewModel.applicationService.mobileSplashBannerAd!),
+              padding: const EdgeInsets.symmetric(vertical: kSpacingTiny),
+              alignment: Alignment.center,
+              color: context.theme.primaryColor,
+              child: viewModel.applicationService.mobileSplashBannerAd != null ? AdWidget(ad: viewModel.applicationService.mobileSplashBannerAd!) : Container(),
             ),
-          ],
-          if (!viewModel.applicationService.advertsInitialized) ...<Widget>[
-            Container(height: kAdvertHeight, width: double.infinity, color: Colors.black),
-          ],
+          ),
         ],
       ),
     );
