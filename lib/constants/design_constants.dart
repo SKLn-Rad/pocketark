@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pocketark/widgets/sliders/pocketark_slider_track_shape.dart';
 
 final ThemeData kThemeData = ThemeData(
   primaryColor: kPrimaryColor,
@@ -13,11 +14,31 @@ final ThemeData kThemeData = ThemeData(
   ),
   scaffoldBackgroundColor: kGrayDarker,
   canvasColor: kGrayDarkest,
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: kGrayDarkest,
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 0.0,
+        style: BorderStyle.none,
+      ),
+      borderRadius: BorderRadius.circular(4.0),
+    ),
+  ),
+  cardTheme: const CardTheme(
+    color: kGrayDark,
+    margin: EdgeInsets.zero,
+  ),
   dividerTheme: const DividerThemeData(
     color: Colors.white,
   ),
   iconTheme: const IconThemeData(
     color: Colors.white,
+  ),
+  sliderTheme: SliderThemeData(
+    activeTrackColor: kPrimaryColor,
+    thumbColor: kHighlightColor,
+    trackShape: PocketArkSliderTrackShape(),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: kPrimaryColor,
@@ -37,8 +58,8 @@ final TextTheme kTextTheme = TextTheme(
   headline4: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
   headline5: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
   headline6: GoogleFonts.carterOne(fontSize: 24, fontWeight: FontWeight.w500, letterSpacing: 0.15, color: Colors.white),
-  subtitle1: GoogleFonts.manrope(fontSize: 19, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
-  subtitle2: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
+  subtitle1: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.15, color: Colors.white),
+  subtitle2: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.1, color: Colors.white),
   bodyText1: GoogleFonts.manrope(fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.5, color: Colors.white),
   bodyText2: GoogleFonts.manrope(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.25, color: Colors.white),
   button: GoogleFonts.manrope(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 1.25, color: Colors.white),
@@ -69,3 +90,14 @@ const double kSpacingExtraLarge = 30.0;
 // Icons
 const double kAppBarIconHeight = 42.0;
 const double kDecorationIconCenterHeight = 92.0;
+
+// Durations
+const Duration kBasicAnimationDuration = Duration(milliseconds: 250);
+
+// Opacities
+const double kEnabledOpacity = 1.0;
+const double kDisabledOpacity = 0.33;
+const double kInvisibleOpacity = 0.00;
+
+// Heights and Widths
+const double kAdvertHeight = 50.0;

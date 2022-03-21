@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
+import 'package:pocketark/views/settings/components/settings_card_notifications_settings.dart';
 
 import '../../../constants/application_constants.dart';
 import '../../../extensions/context_extensions.dart';
@@ -24,7 +25,9 @@ class SettingsView extends HookConsumerWidget {
       body: ListView(
         padding: kSpacingLarge.asPaddingAll,
         children: <Widget>[
-          SettingsCardFilterSettings(viewModel: viewModel),
+          // SettingsCardFilterSettings(viewModel: viewModel),
+          // kSpacingMedium.asHeightWidget,
+          SettingsCardNotificationsSettings(viewModel: viewModel),
           kSpacingMedium.asHeightWidget,
           SettingsCardSystemSettings(viewModel: viewModel),
           kSpacingExtraLarge.asHeightWidget,

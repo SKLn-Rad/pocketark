@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../extensions/context_extensions.dart';
 
-enum PocketArkTimezone { usWest, usEast, euCentral, euWest, southAmerica }
+enum PocketArkTimezone { local, usWest, usEast, euCentral, euWest, southAmerica }
 
 extension PocketArkTimezoneExtensions on PocketArkTimezone {
   String toLocale(BuildContext context) {
@@ -12,6 +12,8 @@ extension PocketArkTimezoneExtensions on PocketArkTimezone {
     }
 
     switch (this) {
+      case PocketArkTimezone.local:
+        return 'Local'; // TODO
       case PocketArkTimezone.usWest:
         return localizations.sharedTimezonesUSWest;
       case PocketArkTimezone.usEast:

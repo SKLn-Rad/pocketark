@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:inqvine_core_main/inqvine_core_main.dart';
+import 'package:pocketark/constants/design_constants.dart';
+import 'package:pocketark/widgets/indicators/pocketark_loading_indicator.dart';
 
 import 'pocketark_drawer.dart';
 
@@ -14,6 +16,7 @@ class PocketArkScaffold extends StatelessWidget {
     this.systemUiOverlayStyle,
     this.bottomNavigationBar,
     this.includeDrawer = true,
+    this.isBusy = false,
     Key? key,
   }) : super(key: key);
 
@@ -23,6 +26,7 @@ class PocketArkScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget body;
   final bool includeDrawer;
+  final bool isBusy;
 
   void handleKeyboardDismiss(BuildContext context) {
     final FocusScopeNode currentFocus = FocusScope.of(context);
@@ -50,7 +54,26 @@ class PocketArkScaffold extends StatelessWidget {
         onTap: () => handleKeyboardDismiss(context),
         child: Scaffold(
           appBar: appBar,
-          body: body,
+          body: Stack(
+            children: <Widget>[
+              Positioned.fill(child: body),
+              Positioned.fill(
+                child: AnimatedOpacity(
+                  duration: kBasicAnimationDuration,
+                  opacity: isBusy ? kEnabledOpacity : kInvisibleOpacity,
+                  child: IgnorePointer(
+                    ignoring: !isBusy,
+                    child: Container(
+                      color: kGrayDark.withOpacity(kDisabledOpacity),
+                      child: const Center(
+                        child: PocketArkLoadingIndicator(),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           bottomNavigationBar: bottomNavigationBar,
           drawer: includeDrawer ? const PocketArkDrawer() : null,
         ),

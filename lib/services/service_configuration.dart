@@ -1,18 +1,23 @@
 // Flutter imports:
+import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
-import 'package:pocketark/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // Project imports:
-import 'package:pocketark/services/event_admin_service.dart';
-import 'package:pocketark/services/event_service.dart';
-import 'package:pocketark/services/system_service.dart';
+import '../constants/application_constants.dart';
+import '../services/auth_service.dart';
+import '../services/event_admin_service.dart';
+import '../services/event_service.dart';
+import '../services/system_service.dart';
 import '../firebase_options.dart';
 import 'application_service.dart';
 
@@ -29,9 +34,23 @@ Future<void> configurePocketArkServices() async {
   inqvine.registerInLocator<FirebaseApp>(firebaseApp);
   inqvine.registerInLocator<FirebaseFirestore>(FirebaseFirestore.instance);
   inqvine.registerInLocator<FirebaseAuth>(FirebaseAuth.instance);
+  inqvine.registerInLocator<Cron>(Cron());
 
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   inqvine.registerInLocator(sharedPreferences);
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(kNotificationsAndroidIcon);
+  const IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+  const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+  inqvine.registerInLocator(flutterLocalNotificationsPlugin);
+
+  final MobileAds mobileAds = MobileAds.instance;
+  inqvine.registerInLocator(mobileAds);
+
+  // Needed for schedule pushes
+  tz.initializeTimeZones();
 
   // Core Services
   await inqvine.registerService(ApplicationService());
@@ -53,5 +72,12 @@ mixin PocketArkServiceMixin {
   FirebaseApp get firebaseApp => inqvine.getFromLocator();
   FirebaseFirestore get firebaseFirestore => inqvine.getFromLocator();
   FirebaseAuth get firebaseAuth => inqvine.getFromLocator();
+  MobileAds get mobileAds => inqvine.getFromLocator();
   SharedPreferences get sharedPreferences => inqvine.getFromLocator();
+  FlutterLocalNotificationsPlugin get localNotifications => inqvine.getFromLocator();
+  Cron get cron => inqvine.getFromLocator();
 }
+
+void onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) {}
+
+void onSelectNotification(String? payload) {}

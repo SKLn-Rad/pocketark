@@ -7,6 +7,9 @@
 
     "pageLegalButtonContinue": "Let's go!",
 
+    "pageEventsComponentsAppBarActionsSelectDate": "Select Date",
+    "pageEventsComponentsAppBarActionsMuteAll": "Mute All",
+    "pageEventsComponentsAppBarActionsUnmuteAll": "Unmute All",
     "pageEventsComponentsEventsCaptionShownDate": "Showing results from {date}",
     "@pageEventsComponentsEventsCaptionShownDate" : {
         "placeholders": {
@@ -14,11 +17,29 @@
         }
     },
 
+    "pageEventsTileCaptionNoMoreEvents":"There are no more events today",
+    "pageEventsTileCaptionNextEventIn":"Next {event} in:",
+    "@pageEventsTileCaptionNextEventIn" : {
+        "placeholders": {
+            "event": {}
+        }
+    },
+
     "pageEventsComponentsEventsCaptionPoweredBy": "Powered by Lost Ark Timer",
+    "pageEventsComponentsEventsTooltipsSearch": "Search for an event...",
 
     "pageSettingsComponentSettingsFilterHeading": "Filter settings",
     "pageSettingsComponentSettingsFilterSubheading": "Update event filters, and reminders.",
     "pageSettingsComponentSettingsFilterTooltipsTimezone": "Timezone:",
+
+    "pageSettingsComponentSettingsNotificationsHeading": "Notification settings",
+    "pageSettingsComponentSettingsNotificationsHelpNotifications": "To avoid spam, we will only notify you of events up to 6 hours ahead of when you last opened the app.",
+    "pageSettingsComponentSettingsNotificationsTooltipMinutes": "Notify me {minute} minutes before events",
+    "@pageSettingsComponentSettingsNotificationsTooltipMinutes": {
+        "placeholders": {
+            "minute": {}
+        }
+    },
 
     "pageSettingsComponentSettingsSystemHeading": "System settings",
     "pageSettingsComponentSettingsSystemSubheading": "Update system and device preferences.",
@@ -44,7 +65,8 @@
     "sharedDialogsHeadingsSuccess": "Success!",
     "sharedActionsRetry": "Retry",
     "sharedActionsContinue": "Continue",
-
+    "sharedActionsSave": "Save",
+    
     "sharedTimezonesUSWest": "US West (UTC-7)",
     "sharedTimezonesUSEast": "US East (UTC-4)",
     "sharedTimezonesEUCentral": "EU Central (UTC+1)",
@@ -52,5 +74,25 @@
     "sharedTimezonesSA": "South America (UTC-4)",
     "sharedTimezonesServerTime": "Server time",
 
-    "errorsNotConnected": "Failed to connect to server."
+    "errorsNotConnected": "Failed to connect to server.",
+    
+
+    "eventTypePvP":"PvP Event",
+    "eventTypeCapture":"Capture",
+    "eventTypeChaosGate":"Chaos Gate",
+    "eventTypeFieldBoss":"Field Boss",
+    "eventTypeAdventureIsland":"Adventure Island",
+    "eventTypeGhostShip":"Ghost Ship",
+    "eventTypeIsland":"Island",
+    "eventTypeSailing":"Sailing",
+    "eventTypeSiege":"Siege",
+    "eventTypeProvingGrounds":"Proving Grounds",
+    "eventTypeUnknown":"Unknown Event",
+
+    "eventNotificationDescription": "Event is starting in {time} minutes",
+    "@eventNotificationDescription": {
+        "placeholders": {
+            "time": {}
+        }
+    }
 }

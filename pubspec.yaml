@@ -18,6 +18,8 @@ dependencies:
   firebase_auth: ^3.3.11
   cloud_firestore: ^3.1.10
   shared_preferences: ^2.0.13
+  flutter_local_notifications: ^9.4.0
+  cron: ^0.4.1
   
   # UI
   go_router: ^3.0.4
@@ -27,12 +29,14 @@ dependencies:
   flutter_svg: ^1.0.3
   ionicons: ^0.1.2
   inqvine_core_ui: ^1.2.0
+  transparent_image: ^2.0.0
 
   # Other
   intl: ^0.17.0
   mocktail: ^0.3.0
   quiver: ^3.0.1+1
   url_launcher: ^6.0.20
+  google_mobile_ads: ^1.1.0
 
 dev_dependencies:
   flutter_test:
