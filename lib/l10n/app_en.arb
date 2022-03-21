@@ -17,6 +17,14 @@
         }
     },
 
+    "pageEventsTileCaptionNoMoreEvents":"There are no more events today",
+    "pageEventsTileCaptionNextEventIn":"Next {event} in:",
+    "@pageEventsTileCaptionNextEventIn" : {
+        "placeholders": {
+            "event": {}
+        }
+    },
+
     "pageEventsComponentsEventsCaptionPoweredBy": "Powered by Lost Ark Timer",
     "pageEventsComponentsEventsTooltipsSearch": "Search for an event...",
 
@@ -67,6 +75,7 @@
     "sharedTimezonesServerTime": "Server time",
 
     "errorsNotConnected": "Failed to connect to server.",
+    
 
     "eventTypePvP":"PvP Event",
     "eventTypeCapture":"Capture",
