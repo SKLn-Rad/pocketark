@@ -13,6 +13,7 @@ const String kSharedKeySettingsTimezone = 'pocketark-settings-timezone';
 const String kSharedKeyTermsAccepted = 'pocketark-terms-accepted';
 const String kSharedKeyMutedEvent = 'pocketark-events-muted-';
 const String kSharedKeyNotificationPreTime = 'pocketark-events-time-before-notification';
+const String kSharedKeyNotificationEnabledFlag = 'pocketark-events-notifications-enabled';
 
 // Notifications
 const String kNotificationsAndroidIcon = 'ic_stat_push_icon';

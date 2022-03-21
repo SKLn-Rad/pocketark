@@ -34,6 +34,7 @@
 
     "pageSettingsComponentSettingsNotificationsHeading": "Notification settings",
     "pageSettingsComponentSettingsNotificationsHelpNotifications": "To avoid spam, we will only notify you of events up to 6 hours ahead of when you last opened the app.",
+    "pageSettingsComponentSettingsNotificationsTooltipEnabled": "Enable notifications:",
     "pageSettingsComponentSettingsNotificationsTooltipMinutes": "Notify me {minute} minutes before events",
     "@pageSettingsComponentSettingsNotificationsTooltipMinutes": {
         "placeholders": {

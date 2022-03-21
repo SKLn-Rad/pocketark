@@ -23,6 +23,14 @@ class SettingsViewModel extends BaseViewModel with PocketArkServiceMixin {
     notifyListeners();
   }
 
+  bool _notificationsEnabled = true;
+  bool get notificationsEnabled => _notificationsEnabled;
+  set notificationsEnabled(bool val) {
+    _notificationsEnabled = val;
+    _canSave = true;
+    notifyListeners();
+  }
+
   @override
   void onFirstRender() {
     super.onFirstRender();
@@ -36,6 +44,10 @@ class SettingsViewModel extends BaseViewModel with PocketArkServiceMixin {
     if (sharedPreferences.containsKey(kSharedKeyNotificationPreTime)) {
       notificationMinutes = sharedPreferences.getInt(kSharedKeyNotificationPreTime) ?? 5;
     }
+
+    if (sharedPreferences.containsKey(kSharedKeyNotificationEnabledFlag)) {
+      notificationsEnabled = sharedPreferences.getBool(kSharedKeyNotificationEnabledFlag) ?? true;
+    }
   }
 
   Future<void> saveSettings() async {
@@ -44,6 +56,8 @@ class SettingsViewModel extends BaseViewModel with PocketArkServiceMixin {
     }
 
     await sharedPreferences.setInt(kSharedKeyNotificationPreTime, notificationMinutes);
+    await sharedPreferences.setBool(kSharedKeyNotificationEnabledFlag, notificationsEnabled);
+
     _canSave = false;
     notifyListeners();
 
