@@ -12,6 +12,9 @@
     "pageEventsComponentsAppBarActionsUnmuteAll": "Unmute All",
     "pageEventsComponentsAppBarActionsHideMuted": "Hide Muted",
     "pageEventsComponentsAppBarActionsShowMuted": "Show Muted",
+    "pageEventsComponentsAppBarActionsSetAlarm": "Set Alarm",
+    "pageEventsComponentsAppBarActionsEnableRepeatingAlarm": "Enable Repeating Alarm",
+    "pageEventsComponentsAppBarActionsDisableRepeatingAlarm": "Disable Repeating Alarm",
     "pageEventsComponentsEventsCaptionShownDate": "Showing results from {date}",
     "@pageEventsComponentsEventsCaptionShownDate" : {
         "placeholders": {

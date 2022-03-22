@@ -16,7 +16,8 @@ import 'package:pocketark/extensions/context_extensions.dart';
 class EventTile extends StatefulWidget {
   const EventTile({
     required this.event,
-    required this.onToggleMute,
+    required this.onToggleEventGlobalAlarm,
+    required this.onSetAlarm,
     this.isLargeFormat = true,
     this.isExpanded = false,
     this.isGlobalAlarmActive = false,
@@ -27,7 +28,8 @@ class EventTile extends StatefulWidget {
   final bool isLargeFormat;
   final bool isExpanded;
   final bool isGlobalAlarmActive;
-  final VoidCallback onToggleMute;
+  final VoidCallback onToggleEventGlobalAlarm;
+  final VoidCallback onSetAlarm;
 
   @override
   State<EventTile> createState() => _EventTileState();
@@ -71,11 +73,12 @@ class _EventTileState extends State<EventTile> {
   Widget build(BuildContext context) {
     final String nextEventCountdown = widget.event.getNextEventTimeAsString;
     final String nextEventCaption = nextEventCountdown.isNotEmpty ? context.localizations!.pageEventsTileCaptionNextEventIn(widget.event.getEventTypeAsString(context)) : context.localizations!.pageEventsTileCaptionNoMoreEvents;
-    final String muteActionLabel = widget.isGlobalAlarmActive ? context.localizations!.sharedActionsUnmute : context.localizations!.sharedActionsMute;
+    final String enableGlobalAlarmLabel = !widget.isGlobalAlarmActive ? context.localizations!.pageEventsComponentsAppBarActionsEnableRepeatingAlarm : context.localizations!.pageEventsComponentsAppBarActionsDisableRepeatingAlarm;
+    final String enableNextAlarmLabel = context.localizations!.pageEventsComponentsAppBarActionsSetAlarm;
 
     return InqvineTapHandler(
       onTap: () => isExpanded = !isExpanded,
-      //! readd this once InqvineTapHandler is updated
+      //! re-add this once InqvineTapHandler is updated
       // opacityTarget: 1.0,
       child: EventCard(
         borderColour: widget.isGlobalAlarmActive ? kHighlightColor : null,
@@ -98,8 +101,13 @@ class _EventTileState extends State<EventTile> {
                     children: <Widget>[
                       MaterialButton(
                         color: kTertiaryColor,
-                        onPressed: widget.onToggleMute,
-                        child: Text(muteActionLabel),
+                        onPressed: widget.onToggleEventGlobalAlarm,
+                        child: Text(enableGlobalAlarmLabel),
+                      ),
+                      MaterialButton(
+                        color: kTertiaryColor,
+                        onPressed: widget.onSetAlarm,
+                        child: Text(enableNextAlarmLabel),
                       ),
                     ],
                   ),

@@ -49,6 +49,10 @@ extension EventExtensions on LostArkEvent {
     return returnSchedule;
   }
 
+  DateTime get getNextEventTimeAsDateTime {
+    return DateTime.fromMillisecondsSinceEpoch(getNextEventTime.timeStart.toInt());
+  }
+
   String get getNextEventTimeAsString {
     final LostArkEvent_LostArkEventSchedule nextEventSchedule = getNextEventTime;
     final Duration nextEventTime = nextEventSchedule.timeUntilEvent;

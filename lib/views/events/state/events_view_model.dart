@@ -5,13 +5,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 
+import 'package:pocketark/extensions/event_extensions.dart';
+
 import '../../../events/adverts_updated_event.dart';
 import '../../../constants/application_constants.dart';
 import '../../../events/events_updated_event.dart';
 import '../../../extensions/context_extensions.dart';
 import '../../../services/service_configuration.dart';
 import '../../../proto/events.pb.dart';
-import '../../../structure/lost_ark_event_schedule.dart';
 
 enum EventDropdownAction {
   selectDate,
@@ -131,16 +132,25 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
   }
 
-  Future<void> toggleEventMute(LostArkEvent event) => handleAction(() async {
-        'Toggling mute of event: ${event.fallbackName}'.logInfo();
-        final bool isGlobalEventAlarmActive = eventService.isGlobalEventAlarmActive(event);
+  Future<void> toggleEventGlobalAlarm(LostArkEvent event) => handleAction(
+        () async {
+          'Toggling global alarm for event: ${event.fallbackName}'.logInfo();
+          final bool isGlobalEventAlarmActive = eventService.isGlobalEventAlarmActive(event);
 
-        if (isGlobalEventAlarmActive) {
-          await eventService.disableGlobalEventAlarm(event, shouldReschedule: true);
-        } else {
-          await eventService.enableGlobalEventAlarm(event, shouldReschedule: true);
-        }
-      });
+          if (isGlobalEventAlarmActive) {
+            await eventService.disableGlobalEventAlarm(event, shouldReschedule: true);
+          } else {
+            await eventService.enableGlobalEventAlarm(event, shouldReschedule: true);
+          }
+        },
+      );
+
+  Future<void> setAlarmTest(LostArkEvent event) => handleAction(
+        () async {
+          'Adding alarm to event: ${event.fallbackName}'.logInfo();
+          await eventService.addAlarm(event, event.getNextEventTimeAsDateTime, shouldReschedule: true);
+        },
+      );
 
   Future<void> filterEvents(EventsUpdatedEvent event) => handleAction(() async {
         notifyListeners();
@@ -154,12 +164,12 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
         filteredEvents.clear();
         notifyListeners();
 
-        for (final LostArkEventSchedule oldEventSchedule in eventService.eventSchedules.values) {
+        for (final LostArkEvent oldEventSchedule in eventService.events.values) {
           final LostArkEvent newEvent = LostArkEvent.create()
-            ..mergeFromMessage(oldEventSchedule.event)
+            ..mergeFromMessage(oldEventSchedule)
             ..schedule.clear();
 
-          for (final LostArkEvent_LostArkEventSchedule schedule in oldEventSchedule.event.schedule) {
+          for (final LostArkEvent_LostArkEventSchedule schedule in oldEventSchedule.schedule) {
             final int eventStartUtc = schedule.timeStart.toInt();
             final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(eventStartUtc);
 
