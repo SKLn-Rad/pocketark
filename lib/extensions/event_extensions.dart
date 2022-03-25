@@ -96,21 +96,14 @@ extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
     }
   }
 
+  bool get isEventInFuture {
+    return timeStart >= DateTime.now().millisecondsSinceEpoch;
+  }
+
   Duration get timeUntilEvent {
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timeStart.toInt());
     final DateTime dateTimeNow = DateTime.now();
     return dateTime.difference(dateTimeNow);
-  }
-
-  Color get getScheduleColour {
-    switch (getEventTense) {
-      case EventScheduleTense.past:
-        return Colors.grey;
-      case EventScheduleTense.future:
-        return Colors.greenAccent;
-      default:
-        return Colors.orange;
-    }
   }
 }
 

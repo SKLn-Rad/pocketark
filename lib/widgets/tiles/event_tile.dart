@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
+import 'package:pocketark/services/event_service.dart';
 import 'package:pocketark/widgets/tiles/event_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../../extensions/event_extensions.dart';
@@ -16,8 +18,6 @@ import 'package:pocketark/extensions/context_extensions.dart';
 class EventTile extends StatefulWidget {
   const EventTile({
     required this.event,
-    required this.onToggleEventGlobalAlarm,
-    required this.onSetAlarm,
     this.isLargeFormat = true,
     this.isExpanded = false,
     this.isGlobalAlarmActive = false,
@@ -28,8 +28,6 @@ class EventTile extends StatefulWidget {
   final bool isLargeFormat;
   final bool isExpanded;
   final bool isGlobalAlarmActive;
-  final VoidCallback onToggleEventGlobalAlarm;
-  final VoidCallback onSetAlarm;
 
   @override
   State<EventTile> createState() => _EventTileState();
@@ -38,10 +36,9 @@ class EventTile extends StatefulWidget {
 class _EventTileState extends State<EventTile> {
   static const double kImageRadius = 72.0;
 
-  Timer? timer;
-
   bool _isExpanded = false;
   bool get isExpanded => _isExpanded;
+
   set isExpanded(bool val) {
     _isExpanded = val;
     if (mounted) {
@@ -50,31 +47,11 @@ class _EventTileState extends State<EventTile> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    setupTimer();
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  void setupTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final String nextEventCountdown = widget.event.getNextEventTimeAsString;
     final String nextEventCaption = nextEventCountdown.isNotEmpty ? context.localizations!.pageEventsTileCaptionNextEventIn(widget.event.getEventTypeAsString(context)) : context.localizations!.pageEventsTileCaptionNoMoreEvents;
     final String enableGlobalAlarmLabel = !widget.isGlobalAlarmActive ? context.localizations!.pageEventsComponentsAppBarActionsEnableRepeatingAlarm : context.localizations!.pageEventsComponentsAppBarActionsDisableRepeatingAlarm;
-    final String enableNextAlarmLabel = context.localizations!.pageEventsComponentsAppBarActionsSetAlarm;
+    final EventService eventService = inqvine.getFromLocator<EventService>();
 
     return InqvineTapHandler(
       onTap: () => isExpanded = !isExpanded,
@@ -101,14 +78,23 @@ class _EventTileState extends State<EventTile> {
                     children: <Widget>[
                       MaterialButton(
                         color: kTertiaryColor,
-                        onPressed: widget.onToggleEventGlobalAlarm,
+                        onPressed: () => eventService.toggleEventGlobalAlarm(widget.event),
                         child: Text(enableGlobalAlarmLabel),
                       ),
-                      MaterialButton(
-                        color: kTertiaryColor,
-                        onPressed: widget.onSetAlarm,
-                        child: Text(enableNextAlarmLabel),
-                      ),
+                      for (LostArkEvent_LostArkEventSchedule schedule in widget.event.schedule) ...<Widget>[
+                        if (schedule.isEventInFuture)
+                          CheckboxListTile(
+                            value: eventService.isSingleAlarmActive(widget.event, schedule),
+                            title: Text(schedule.getEventStartTimeAsString),
+                            secondary: const Icon(Icons.timelapse_outlined),
+                            onChanged: (_) => eventService.toggleAlarm(widget.event, schedule),
+                          ),
+                      ]
+                      // MaterialButton(
+                      //   color: kTertiaryColor,
+                      //   onPressed: widget.onSetAlarm,
+                      //   child: Text(enableNextAlarmLabel),
+                      // ),
                     ],
                   ),
                 ),
@@ -135,6 +121,7 @@ class _EventTileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EventService eventService = inqvine.getFromLocator<EventService>();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -161,21 +148,7 @@ class _EventTileHeader extends StatelessWidget {
                 style: context.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
               ),
               kSpacingTiny.asHeightWidget,
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: nextEventCaption,
-                      style: context.textTheme.caption!.copyWith(color: Colors.green),
-                    ),
-                    const TextSpan(text: ' '),
-                    TextSpan(
-                      text: widget.event.getNextEventTimeAsString,
-                      style: context.textTheme.caption!.copyWith(color: Colors.yellow),
-                    ),
-                  ],
-                ),
-              ),
+              _EventTileTimer(nextEventCaption: nextEventCaption, widget: widget),
               kSpacingTiny.asHeightWidget,
               RichText(
                 text: TextSpan(
@@ -183,7 +156,7 @@ class _EventTileHeader extends StatelessWidget {
                     for (LostArkEvent_LostArkEventSchedule schedule in widget.event.schedule) ...<TextSpan>[
                       TextSpan(
                         text: schedule.getEventStartTimeAsString,
-                        style: context.textTheme.caption!.copyWith(color: schedule.getScheduleColour),
+                        style: context.textTheme.caption!.copyWith(color: eventService.getScheduleColour(widget.event, schedule)),
                       ),
                       if (widget.event.schedule.last != schedule)
                         TextSpan(
@@ -198,6 +171,63 @@ class _EventTileHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _EventTileTimer extends StatefulWidget {
+  const _EventTileTimer({
+    Key? key,
+    required this.nextEventCaption,
+    required this.widget,
+  }) : super(key: key);
+
+  final String nextEventCaption;
+  final EventTile widget;
+
+  @override
+  State<_EventTileTimer> createState() => _EventTileTimerState();
+}
+
+class _EventTileTimerState extends State<_EventTileTimer> {
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    setupTimer();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  void setupTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: widget.nextEventCaption,
+            style: context.textTheme.caption!.copyWith(color: Colors.green),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: widget.widget.event.getNextEventTimeAsString,
+            style: context.textTheme.caption!.copyWith(color: Colors.yellow),
+          ),
+        ],
+      ),
     );
   }
 }

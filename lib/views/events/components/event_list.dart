@@ -44,8 +44,6 @@ class EventList extends StatelessWidget {
         return EventTile(
           event: event,
           isGlobalAlarmActive: isActive,
-          onSetAlarm: () => viewModel.setAlarmTest(event),
-          onToggleEventGlobalAlarm: () => viewModel.toggleEventGlobalAlarm(event),
         );
       },
     );

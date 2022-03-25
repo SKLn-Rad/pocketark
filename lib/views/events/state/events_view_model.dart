@@ -132,26 +132,6 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: true));
   }
 
-  Future<void> toggleEventGlobalAlarm(LostArkEvent event) => handleAction(
-        () async {
-          'Toggling global alarm for event: ${event.fallbackName}'.logInfo();
-          final bool isGlobalEventAlarmActive = eventService.isGlobalEventAlarmActive(event);
-
-          if (isGlobalEventAlarmActive) {
-            await eventService.disableGlobalEventAlarm(event, shouldReschedule: true);
-          } else {
-            await eventService.enableGlobalEventAlarm(event, shouldReschedule: true);
-          }
-        },
-      );
-
-  Future<void> setAlarmTest(LostArkEvent event) => handleAction(
-        () async {
-          'Adding alarm to event: ${event.fallbackName}'.logInfo();
-          await eventService.addAlarm(event, event.getNextEventTimeAsDateTime, shouldReschedule: true);
-        },
-      );
-
   Future<void> filterEvents(EventsUpdatedEvent event) => handleAction(() async {
         notifyListeners();
         if (!event.shouldSort) {
@@ -172,7 +152,6 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
           for (final LostArkEvent_LostArkEventSchedule schedule in oldEventSchedule.schedule) {
             final int eventStartUtc = schedule.timeStart.toInt();
             final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(eventStartUtc);
-
             //* We can adjust offsets here for server time
             // compareDateTime.offset = +1
             // eventStartTime.offset = +1
@@ -182,17 +161,19 @@ class EventsViewModel extends BaseViewModel with PocketArkServiceMixin {
             }
           }
 
-          if (newEvent.schedule.isNotEmpty) {
-            newEvent.schedule.sort(
-              (a, b) {
-                return a.timeStart.compareTo(b.timeStart);
-              },
-            );
+          newEvent.schedule.sort(
+            (a, b) {
+              return a.timeStart.compareTo(b.timeStart);
+            },
+          );
 
+          if (newEvent.schedule.isNotEmpty) {
             final DateTime eventStartTime = DateTime.fromMillisecondsSinceEpoch(newEvent.schedule.last.timeStart.toInt());
             final DateTime timeNow = DateTime.now();
             final Duration difference = eventStartTime.difference(timeNow);
+
             //? Check that there is at least one event in the near future
+            //? so as long as the last event (assuming ordered) is in the future
             if (difference >= Duration.zero) {
               filteredEvents.add(newEvent);
             }

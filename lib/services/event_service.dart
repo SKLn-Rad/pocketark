@@ -87,6 +87,7 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     // Unschedule all notifications
     //* should this be the case? or should we keep track of notifications and only update the ones needed?
     await localNotifications.cancelAll();
+    await cleanupAlarms();
 
     // Get and check context
     final BuildContext? context = kRouter.routerDelegate.navigatorKey.currentState?.context;
@@ -111,13 +112,13 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
 
     for (final LostArkEvent event in events.values) {
       final List<DateTime> eventAlarms = getAlarmsForEvent(event);
+      final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
 
       for (DateTime time in eventAlarms) {
         if (time.millisecondsSinceEpoch <= 0) {
           continue;
         }
         final tz.TZDateTime scheduleTime = tz.TZDateTime.from(time, tz.UTC).subtract(Duration(minutes: timeMinutesBeforeNotification));
-        final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
 
         //* Do not schedule in the past (Add one second for logic completion)
         if (currentTime.millisecondsSinceEpoch > scheduleTime.millisecondsSinceEpoch - 1000) {
@@ -152,7 +153,6 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
 
       for (final LostArkEvent_LostArkEventSchedule schedule in event.schedule) {
         final tz.TZDateTime scheduleTime = tz.TZDateTime.fromMillisecondsSinceEpoch(tz.UTC, schedule.timeStart.toInt()).subtract(Duration(minutes: timeMinutesBeforeNotification));
-        final tz.TZDateTime currentTime = tz.TZDateTime.now(tz.UTC);
 
         //* Do not schedule in the past (Add one second for logic completion)
         if (currentTime.millisecondsSinceEpoch > scheduleTime.millisecondsSinceEpoch - 1000) {
@@ -236,10 +236,43 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     }
   }
 
-  Future<void> addAlarm(LostArkEvent event, DateTime alarmDateTime, {bool shouldReschedule = false}) async {
-    'Adding alarm for event: ${event.fallbackName} at ${alarmDateTime}'.logInfo();
+  Future<void> toggleEventGlobalAlarm(LostArkEvent event) async {
+    'Toggling global alarm for event: ${event.fallbackName}'.logInfo();
+    final bool isGlobalEventAlarmActive = eventService.isGlobalEventAlarmActive(event);
 
-    final String alarmString = alarmDateTime.toString();
+    if (isGlobalEventAlarmActive) {
+      await disableGlobalEventAlarm(event, shouldReschedule: true);
+    } else {
+      await enableGlobalEventAlarm(event, shouldReschedule: true);
+    }
+  }
+
+  bool isSingleAlarmActive(LostArkEvent event, LostArkEvent_LostArkEventSchedule schedule) {
+    // 'Checking alarm for event: ${event.fallbackName} at ${DateTime.fromMillisecondsSinceEpoch(schedule.timeStart.toInt())}'.logDebug();
+    final String alarmString = schedule.timeStart.toString();
+    final String sharedKey = '$kSharedKeyEventAlarms${event.id}';
+
+    final List<String> timeList = sharedPreferences.getStringList(sharedKey) ?? <String>[];
+
+    //* Check if shared pref list contains the time already, otherwise add it
+    if (timeList.contains(alarmString)) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> toggleAlarm(LostArkEvent event, LostArkEvent_LostArkEventSchedule schedule) async {
+    if (isSingleAlarmActive(event, schedule)) {
+      await removeAlarm(event, schedule);
+    } else {
+      await addAlarm(event, schedule);
+    }
+  }
+
+  Future<void> addAlarm(LostArkEvent event, LostArkEvent_LostArkEventSchedule schedule, {bool shouldReschedule = false}) async {
+    'Adding alarm for event: ${event.fallbackName} at ${schedule.timeStart}'.logInfo();
+
+    final String alarmString = schedule.timeStart.toString();
     final String sharedKey = '$kSharedKeyEventAlarms${event.id}';
 
     final List<String> timeList = sharedPreferences.getStringList(sharedKey) ?? <String>[];
@@ -264,9 +297,9 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     return dateTimeList;
   }
 
-  Future<void> removeAlarm(LostArkEvent event, DateTime alarmDateTime, {bool shouldReschedule = false}) async {
+  Future<void> removeAlarm(LostArkEvent event, LostArkEvent_LostArkEventSchedule schedule, {bool shouldReschedule = false}) async {
     'Removing the alarm for event: ${event.fallbackName}'.logInfo();
-    final String alarmString = alarmDateTime.toString();
+    final String alarmString = schedule.timeStart.toString();
     final String sharedKey = '$kSharedKeyEventAlarms${event.id}';
 
     final List<String> timeList = sharedPreferences.getStringList(sharedKey) ?? <String>[];
@@ -275,10 +308,63 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
     timeList.removeWhere((element) => element == alarmString);
     await sharedPreferences.setStringList(sharedKey, timeList);
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
-    'Removed the alarm from event ${event.fallbackName} at time: ${alarmDateTime}'.logInfo();
+    'Removed the alarm from event ${event.fallbackName} at time: ${schedule.timeStart}'.logInfo();
 
     if (shouldReschedule) {
       await scheduleNotifications();
+    }
+  }
+
+  Iterable<String> getSingleAlarmKeys() {
+    return sharedPreferences.getKeys().where((element) => element.startsWith(kSharedKeyEventAlarms));
+  }
+
+  Iterable<String> getAllAlarmKeys() {
+    return sharedPreferences.getKeys().where((element) => element.startsWith(kSharedKeyEventAlarms) || element.startsWith(kSharedKeyEventGlobalAlarm));
+  }
+
+  Future<int> countSingleAlarms() async {
+    int count = 0;
+    for (final String key in getSingleAlarmKeys()) {
+      count += (sharedPreferences.getStringList(key) ?? <String>[]).length;
+    }
+    return count;
+  }
+
+  Future<void> cleanupAlarms() async {
+    final Iterable<String> keys = getSingleAlarmKeys();
+    for (final String key in keys) {
+      final List<String> alarmList = sharedPreferences.getStringList(key) ?? <String>[];
+      final List<String> returnAlarmList = <String>[];
+
+      for (final String alarmString in alarmList) {
+        DateTime? decodedAlarm = DateTime.tryParse(alarmString);
+        if (decodedAlarm != null && decodedAlarm.compareTo(DateTime.now()) >= 0) {
+          returnAlarmList.add(alarmString);
+        }
+      }
+      sharedPreferences.setStringList(key, returnAlarmList);
+    }
+  }
+
+  Future<void> clearAllAlarms() async {
+    final Iterable<String> keys = getAllAlarmKeys();
+    for (final String key in keys) {
+      sharedPreferences.remove(key);
+    }
+  }
+
+  Color getScheduleColour(LostArkEvent event, LostArkEvent_LostArkEventSchedule schedule) {
+    switch (schedule.getEventTense) {
+      case EventScheduleTense.past:
+        return Colors.grey;
+      case EventScheduleTense.future:
+        if (isSingleAlarmActive(event, schedule)) {
+          return Colors.orange;
+        }
+        return Colors.greenAccent;
+      default:
+        return Colors.orange;
     }
   }
 }
