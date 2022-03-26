@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
 import 'package:pocketark/services/event_service.dart';
+import 'package:pocketark/widgets/buttons/time_checkbox_button.dart';
 import 'package:pocketark/widgets/tiles/event_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -71,23 +72,24 @@ class _EventTileState extends State<EventTile> {
                 SizedBox(
                   width: double.infinity,
                   child: Wrap(
-                    alignment: WrapAlignment.center,
+                    alignment: WrapAlignment.spaceEvenly,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: kSpacingSmall,
                     runSpacing: kSpacingSmall,
                     children: <Widget>[
-                      MaterialButton(
-                        color: kTertiaryColor,
-                        onPressed: () => eventService.toggleEventGlobalAlarm(widget.event),
-                        child: Text(enableGlobalAlarmLabel),
-                      ),
+                      // MaterialButton(
+                      //   color: kTertiaryColor,
+                      //   onPressed: () => eventService.toggleEventGlobalAlarm(widget.event),
+                      //   child: Text(enableGlobalAlarmLabel),
+                      // ),
                       for (LostArkEvent_LostArkEventSchedule schedule in widget.event.schedule) ...<Widget>[
                         if (schedule.isEventInFuture)
-                          CheckboxListTile(
+                          // CheckboxListTile(
+                          TimeCheckboxButton(
                             value: eventService.isSingleAlarmActive(widget.event, schedule),
-                            title: Text(schedule.getEventStartTimeAsString),
-                            secondary: const Icon(Icons.timelapse_outlined),
-                            onChanged: (_) => eventService.toggleAlarm(widget.event, schedule),
+                            title: schedule.getEventStartTimeAsString,
+                            // secondary: const Icon(Icons.timelapse_outlined),
+                            onTap: () => eventService.toggleAlarm(widget.event, schedule),
                           ),
                       ]
                       // MaterialButton(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:inqvine_core_main/inqvine_core_main.dart';
 import 'package:inqvine_core_ui/inqvine_core_ui.dart';
+import 'package:pocketark/services/event_service.dart';
 import 'package:pocketark/views/settings/components/settings_card_notifications_settings.dart';
 
 import '../../../constants/application_constants.dart';
@@ -30,6 +31,8 @@ class SettingsView extends HookConsumerWidget {
           SettingsCardNotificationsSettings(viewModel: viewModel),
           // kSpacingMedium.asHeightWidget,
           // SettingsCardSystemSettings(viewModel: viewModel),
+          kSpacingExtraLarge.asHeightWidget,
+          TextButton(onPressed: () => inqvine.getFromLocator<EventService>().clearAllAlarms(), child: Text("purge alarms")),
           kSpacingExtraLarge.asHeightWidget,
           InqvineTapHandler(
             isEnabled: !viewModel.isBusy,

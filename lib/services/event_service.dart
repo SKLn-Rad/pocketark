@@ -306,7 +306,11 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
 
     //* Check if shared pref list contains the time then remove it
     timeList.removeWhere((element) => element == alarmString);
-    await sharedPreferences.setStringList(sharedKey, timeList);
+    if (timeList.isEmpty) {
+      sharedPreferences.remove(sharedKey);
+    } else {
+      await sharedPreferences.setStringList(sharedKey, timeList);
+    }
     inqvine.publishEvent(const EventsUpdatedEvent(shouldSort: false));
     'Removed the alarm from event ${event.fallbackName} at time: ${schedule.timeStart}'.logInfo();
 
@@ -334,12 +338,12 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
   Future<void> cleanupAlarms() async {
     final Iterable<String> keys = getSingleAlarmKeys();
     for (final String key in keys) {
-      final List<String> alarmList = sharedPreferences.getStringList(key) ?? <String>[];
+      final List<String> alarmList = sharedPreferences.getStringList(key) ?? <String>["error"];
       final List<String> returnAlarmList = <String>[];
 
       for (final String alarmString in alarmList) {
-        DateTime? decodedAlarm = DateTime.tryParse(alarmString);
-        if (decodedAlarm != null && decodedAlarm.compareTo(DateTime.now()) >= 0) {
+        DateTime decodedAlarm = DateTime.fromMillisecondsSinceEpoch(int.tryParse(alarmString) ?? 0);
+        if (decodedAlarm.compareTo(DateTime.now()) >= 0) {
           returnAlarmList.add(alarmString);
         }
       }
@@ -349,7 +353,10 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
 
   Future<void> clearAllAlarms() async {
     final Iterable<String> keys = getAllAlarmKeys();
+    "There are ${keys.length} alarms set".logError();
     for (final String key in keys) {
+      sharedPreferences.getStringList(key).toString().logInfo();
+      "$key alarm removed".logError();
       sharedPreferences.remove(key);
     }
   }
@@ -364,7 +371,7 @@ class EventService extends InqvineServiceBase with PocketArkServiceMixin {
         }
         return Colors.greenAccent;
       default:
-        return Colors.orange;
+        return Colors.grey;
     }
   }
 }

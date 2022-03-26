@@ -82,17 +82,12 @@ extension ScheduleExtensions on LostArkEvent_LostArkEventSchedule {
 
   EventScheduleTense get getEventTense {
     final Duration timeUntilEventLocal = timeUntilEvent;
-
     //! Change duration minutes to a configurable setting
     //? Three minute interval since most events start at three mins past
-    if (timeUntilEventLocal >= const Duration(minutes: -3) && timeUntilEventLocal <= const Duration(minutes: 30)) {
-      return EventScheduleTense.present;
+    if (timeUntilEventLocal > Duration.zero) {
+      return EventScheduleTense.future;
     } else {
-      if (timeUntilEventLocal > Duration.zero) {
-        return EventScheduleTense.future;
-      } else {
-        return EventScheduleTense.past;
-      }
+      return EventScheduleTense.past;
     }
   }
 
